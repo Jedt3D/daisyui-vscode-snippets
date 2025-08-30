@@ -11,7 +11,7 @@ A collection of [Visual Studio Code](https://code.visualstudio.com/) snippets us
 - Generate snippets that refer to the original DaisyUI examples.
 - You can try using `d-` to start the snippets. Also using the first letter of the component name's sections, e.g. `d-aa` for `d-alert-alert` and a bunch of others.
 
-![Screenshot](https://github.com/worajedts-pspasia/daisyui-snippet-vscode/images/screenshot.png)
+![Screenshot](https://github.com/Jedt3D/daisyui-vscode-snippets/blob/main/images/screenshot.jpg)
 
 ## Installation
 
@@ -19,7 +19,7 @@ These snippets can now be installed via [VS Code Marketplace](https://marketplac
 
 ## Manual installation with extension
 
-1. Download [daisyui-vscode-snippets.vsix](https://github.com/Jedt3D/daisyui-vscode-snippets/bin/daisyui-vscode-snippets.vsix)
+1. Download [daisyui-vscode-snippets.vsix](https://github.com/Jedt3D/daisyui-vscode-snippets/blob/main/bin/daisyui-vscode-snippets.vsix)
 2. Press `F1` enter `ext vsix`
 3. Select `daisyui-vscode-snippets.vsix`
   
