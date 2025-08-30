@@ -4,7 +4,7 @@
 A collection of [Visual Studio Code](https://code.visualstudio.com/) snippets useful for writing [DaisyUI Components](https://daisyui.com/components/)
 
 ## Version
-- *0.0.1* - First release
+- *0.0.3* - Updated version with node_modules exclusion
 
 ## Features
 
