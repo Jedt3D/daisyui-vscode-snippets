@@ -1,6 +1,6 @@
 {
     "name": "daisyui-vscode-snippets",
-    "displayName": "DaisyUI Snippets for VSCode",
+    "displayName": "DaisyUI Snippets – Visual Studio Code Edition",
     "description": "A collection of Visual Studio Code snippets useful for writing DaisyUI code.",
     "version": "0.0.1",
     "publisher": "sjedt",
