@@ -1,0 +1,29 @@
+{
+    "name": "daisyui-vscode-snippets",
+    "displayName": "DaisyUI Snippets for VSCode",
+    "description": "A collection of Visual Studio Code snippets useful for writing DaisyUI code.",
+    "version": "0.0.1",
+    "publisher": "sjedt",
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "categories": [
+        "Snippets"
+    ],
+    "contributes": {
+        "snippets": [
+            {
+                "language": "html",
+                "path": "./snippets/snippets.json"
+            }
+        ]
+    },
+    "icon": "images/icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Jedt3D/daisyui-vscode-snippets.git"
+    },
+    "dependencies": {
+        "@vscode/vsce": "^3.6.0"
+    }
+}
