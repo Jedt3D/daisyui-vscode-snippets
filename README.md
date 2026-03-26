@@ -173,6 +173,7 @@ Recommended workflow for each improvement cycle:
    - tag the release
 
 The full roadmap lives in [`improvement_plan.md`](./improvement_plan.md).
+The release operations playbook lives in [`RELEASING.md`](./RELEASING.md).
 
 ## Scope
 
