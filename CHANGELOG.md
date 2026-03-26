@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.2.0] - 2026-03-27
+
+- promoted a second wave of common components into curated multi-variant snippets
+- added stronger variants for accordion, avatar, checkbox, footer, hero, menu, select, tabs, toast, and toggle
+- improved library-wide UX consistency while keeping the snippet set intentionally curated
+
 ## [0.1.1] - 2026-03-27
 
 - added the `!d` starter snippet for a full HTML document with DaisyUI and Tailwind browser CDN tags

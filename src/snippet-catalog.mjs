@@ -463,6 +463,26 @@ const fallbackSnippets = [
       $0`,
   }),
   defineSnippet({
+    component: "Accordion",
+    variant: "Plus",
+    prefixes: ["d-accordion-plus"],
+    description: "Accordion group with plus indicator styling.",
+    body: String.raw`
+      <div class="space-y-3">
+        <div class="collapse collapse-plus bg-base-100 border border-base-300">
+          <input type="checkbox" checked="checked" />
+          <div class="collapse-title text-base font-semibold">\${1:What is included?}</div>
+          <div class="collapse-content text-sm">\${2:Summarize the included features or package details here.}</div>
+        </div>
+        <div class="collapse collapse-plus bg-base-100 border border-base-300">
+          <input type="checkbox" />
+          <div class="collapse-title text-base font-semibold">\${3:Can I customize it?}</div>
+          <div class="collapse-content text-sm">\${4:Use this second item for a secondary FAQ answer.}</div>
+        </div>
+      </div>
+      $0`,
+  }),
+  defineSnippet({
     component: "Avatar",
     prefixes: ["d-avatar"],
     description: "Avatar image with rounded framing.",
@@ -470,6 +490,31 @@ const fallbackSnippets = [
       <div class="avatar">
         <div class="w-24 rounded-full">
           <img src="\${1:https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80}" alt="\${2:Avatar}" />
+        </div>
+      </div>
+      $0`,
+  }),
+  defineSnippet({
+    component: "Avatar",
+    variant: "Group",
+    prefixes: ["d-avatar-group"],
+    description: "Overlapping avatar group for teams or participants.",
+    body: String.raw`
+      <div class="avatar-group -space-x-4 rtl:space-x-reverse">
+        <div class="avatar">
+          <div class="w-12">
+            <img src="\${1:https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80}" alt="\${2:Teammate one}" />
+          </div>
+        </div>
+        <div class="avatar">
+          <div class="w-12">
+            <img src="\${3:https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80}" alt="\${4:Teammate two}" />
+          </div>
+        </div>
+        <div class="avatar placeholder">
+          <div class="bg-neutral text-neutral-content w-12">
+            <span>\${5:+3}</span>
+          </div>
         </div>
       </div>
       $0`,
@@ -550,6 +595,21 @@ const fallbackSnippets = [
       <label class="label cursor-pointer justify-start gap-3">
         <input type="checkbox" class="checkbox" />
         <span class="label-text">\${1:Enable email updates}</span>
+      </label>
+      $0`,
+  }),
+  defineSnippet({
+    component: "Checkbox",
+    variant: "Primary",
+    prefixes: ["d-checkbox-primary"],
+    description: "Primary checkbox with helper label layout.",
+    body: String.raw`
+      <label class="label cursor-pointer justify-start gap-3">
+        <input type="checkbox" class="checkbox checkbox-primary" checked="checked" />
+        <div>
+          <span class="label-text font-medium">\${1:Enable public sharing}</span>
+          <p class="text-sm text-base-content/70">\${2:Allow anyone with the link to access this page.}</p>
+        </div>
       </label>
       $0`,
   }),
@@ -694,6 +754,24 @@ const fallbackSnippets = [
       $0`,
   }),
   defineSnippet({
+    component: "Footer",
+    variant: "Centered",
+    prefixes: ["d-footer-centered"],
+    description: "Centered footer with compact navigation links.",
+    body: String.raw`
+      <footer class="footer footer-center bg-base-200 text-base-content rounded-box p-8">
+        <nav class="grid grid-flow-col gap-4">
+          <a href="\${1:#}" class="link link-hover">\${2:About}</a>
+          <a href="\${3:#}" class="link link-hover">\${4:Docs}</a>
+          <a href="\${5:#}" class="link link-hover">\${6:Contact}</a>
+        </nav>
+        <aside>
+          <p>\${7:Copyright © 2026 - All rights reserved}</p>
+        </aside>
+      </footer>
+      $0`,
+  }),
+  defineSnippet({
     component: "Hero",
     prefixes: ["d-hero"],
     description: "Hero section with title, body, and CTA.",
@@ -704,6 +782,34 @@ const fallbackSnippets = [
             <h1 class="text-5xl font-bold">\${1:Build better with DaisyUI}</h1>
             <p class="py-6">\${2:Use this hero block to introduce your product, campaign, or feature launch.}</p>
             <a href="\${3:#}" class="btn btn-primary">\${4:Get started}</a>
+          </div>
+        </div>
+      </section>
+      $0`,
+  }),
+  defineSnippet({
+    component: "Hero",
+    variant: "Split",
+    prefixes: ["d-hero-split"],
+    description: "Split hero layout with copy and supporting card.",
+    body: String.raw`
+      <section class="hero bg-base-200 rounded-box">
+        <div class="hero-content flex-col gap-10 lg:flex-row lg:items-center">
+          <div class="max-w-xl">
+            <span class="badge badge-secondary badge-outline mb-4">\${1:Launch ready}</span>
+            <h1 class="text-5xl font-bold">\${2:Ship the next version with confidence}</h1>
+            <p class="py-6">\${3:Use a split hero when you want a stronger product-marketing layout with supporting proof or metrics.}</p>
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <a href="\${4:#}" class="btn btn-primary">\${5:Start trial}</a>
+              <a href="\${6:#}" class="btn btn-outline">\${7:See demo}</a>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+              <p class="text-sm text-base-content/70">\${8:Trusted by teams shipping every day}</p>
+              <p class="text-4xl font-bold">\${9:42% faster}</p>
+              <p>\${10:Average reduction in UI build time after adopting a shared component system.}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -797,6 +903,19 @@ const fallbackSnippets = [
         <li><a href="\${1:#}">\${2:Overview}</a></li>
         <li><a href="\${3:#}">\${4:Projects}</a></li>
         <li><a href="\${5:#}">\${6:Settings}</a></li>
+      </ul>
+      $0`,
+  }),
+  defineSnippet({
+    component: "Menu",
+    variant: "Horizontal",
+    prefixes: ["d-menu-horizontal"],
+    description: "Horizontal navigation menu for headers and toolbars.",
+    body: String.raw`
+      <ul class="menu menu-horizontal bg-base-200 rounded-box">
+        <li><a href="\${1:#}">\${2:Overview}</a></li>
+        <li><a href="\${3:#}">\${4:Roadmap}</a></li>
+        <li><a href="\${5:#}">\${6:Changelog}</a></li>
       </ul>
       $0`,
   }),
@@ -926,6 +1045,24 @@ const fallbackSnippets = [
       $0`,
   }),
   defineSnippet({
+    component: "Select",
+    variant: "Ghost",
+    prefixes: ["d-select-ghost"],
+    description: "Ghost select for low-emphasis filtering and utility controls.",
+    body: String.raw`
+      <label class="form-control w-full max-w-xs">
+        <div class="label">
+          <span class="label-text">\${1:Filter by status}</span>
+        </div>
+        <select class="select select-ghost w-full">
+          <option>\${2:All}</option>
+          <option>\${3:Open}</option>
+          <option>\${4:Closed}</option>
+        </select>
+      </label>
+      $0`,
+  }),
+  defineSnippet({
     component: "Skeleton",
     prefixes: ["d-skeleton"],
     description: "Skeleton loader block.",
@@ -1009,6 +1146,22 @@ const fallbackSnippets = [
       $0`,
   }),
   defineSnippet({
+    component: "Tabs",
+    variant: "Lifted",
+    prefixes: ["d-tabs-lifted"],
+    description: "Lifted tabs for dashboard or settings panels.",
+    body: String.raw`
+      <div role="tablist" class="tabs tabs-lifted">
+        <a role="tab" class="tab tab-active">\${1:Account}</a>
+        <a role="tab" class="tab">\${2:Team}</a>
+        <a role="tab" class="tab">\${3:Billing}</a>
+      </div>
+      <div class="rounded-box rounded-tl-none border border-base-300 bg-base-100 p-6">
+        <p>\${4:Use the panel below the tabs for contextual settings content.}</p>
+      </div>
+      $0`,
+  }),
+  defineSnippet({
     component: "Theme Controller",
     prefixes: ["d-theme-controller"],
     description: "Theme toggle shell for DaisyUI themes.",
@@ -1058,6 +1211,20 @@ const fallbackSnippets = [
       $0`,
   }),
   defineSnippet({
+    component: "Toast",
+    variant: "Success",
+    prefixes: ["d-toast-success"],
+    description: "Toast stack with a success message and CTA.",
+    body: String.raw`
+      <div class="toast toast-end">
+        <div class="alert alert-success">
+          <span>\${1:Profile updated successfully.}</span>
+          <a href="\${2:#}" class="btn btn-xs btn-ghost">\${3:View}</a>
+        </div>
+      </div>
+      $0`,
+  }),
+  defineSnippet({
     component: "Toggle",
     prefixes: ["d-toggle"],
     description: "Toggle switch with label text.",
@@ -1065,6 +1232,21 @@ const fallbackSnippets = [
       <label class="label cursor-pointer justify-start gap-3">
         <input type="checkbox" class="toggle" />
         <span class="label-text">\${1:Enable notifications}</span>
+      </label>
+      $0`,
+  }),
+  defineSnippet({
+    component: "Toggle",
+    variant: "Primary",
+    prefixes: ["d-toggle-primary"],
+    description: "Primary toggle with helper copy for settings screens.",
+    body: String.raw`
+      <label class="label cursor-pointer justify-start gap-3">
+        <input type="checkbox" class="toggle toggle-primary" checked="checked" />
+        <div>
+          <span class="label-text font-medium">\${1:Enable smart summaries}</span>
+          <p class="text-sm text-base-content/70">\${2:Generate a short recap after each completed workflow.}</p>
+        </div>
       </label>
       $0`,
   }),

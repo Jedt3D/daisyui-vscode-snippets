@@ -2,6 +2,12 @@
 
 Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, valid markup, and editable placeholders.
 
+## What Changed in `0.2.0`
+
+- Promoted a second wave of common components into curated multi-variant snippets.
+- Added stronger variants for accordion, avatar, checkbox, footer, hero, menu, select, tabs, toast, and toggle.
+- Improved library-wide UX consistency without reintroducing noisy snippet sprawl.
+
 ## What Changed in `0.1.1`
 
 - Added `!d`, an HTML starter snippet that includes the current DaisyUI and Tailwind browser CDN setup.
@@ -35,15 +41,25 @@ Every snippet is designed for plain HTML workflows:
 - `d-alert`
 - `!d`
 - `d-alert-info`
+- `d-accordion-plus`
+- `d-avatar-group`
 - `d-badge-outline`
 - `d-button` or `d-btn`
 - `d-card-image`
+- `d-checkbox-primary`
 - `d-dropdown-end`
+- `d-footer-centered`
+- `d-hero-split`
 - `d-input`
+- `d-menu-horizontal`
 - `d-modal`
 - `d-navbar`
+- `d-select-ghost`
 - `d-table-zebra`
+- `d-tabs-lifted`
 - `d-textarea`
+- `d-toast-success`
+- `d-toggle-primary`
 
 ## Installation
 
