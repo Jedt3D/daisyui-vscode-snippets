@@ -2,6 +2,10 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.2.3] - 2026-03-27
+
+- changed the Marketplace display name to `DaisyUI HTML Snippets` to avoid a naming conflict during publish
+
 ## [0.2.2] - 2026-03-27
 
 - added a tag-driven GitHub release workflow that packages and uploads the `.vsix`
