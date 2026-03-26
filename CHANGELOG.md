@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.2.2] - 2026-03-27
+
+- added a tag-driven GitHub release workflow that packages and uploads the `.vsix`
+- added explicit pre-publish and Marketplace publish commands
+- tightened the release runbook for tags, GitHub releases, and Marketplace publishing
+
 ## [0.2.1] - 2026-03-27
 
 - added GitHub Actions CI to generate, validate, and package the extension on each push and pull request

@@ -2,6 +2,12 @@
 
 Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, valid markup, and editable placeholders.
 
+## What Changed in `0.2.2`
+
+- Added a tag-driven GitHub release workflow that packages and attaches the `.vsix` artifact automatically.
+- Added explicit Marketplace publishing commands and a local pre-publish gate.
+- Tightened the release runbook so GitHub release and Marketplace publish steps are repeatable.
+
 ## What Changed in `0.2.1`
 
 - Added GitHub Actions CI to generate, validate, and package the extension on every push and pull request.
@@ -100,6 +106,7 @@ npm run generate
 npm run validate
 npm run package:vsix
 npm run release:check
+npm run publish:precheck
 ```
 
 ## Release Checklist
@@ -121,6 +128,31 @@ Use this flow before a Marketplace publish or release tag:
    - `d-table-zebra`
 5. Update the changelog and release notes.
 6. Tag from `main` after the PR is merged.
+
+## Publishing
+
+Local Marketplace publish flow:
+
+```bash
+npm run publish:precheck
+npx @vscode/vsce login sjedt
+npm run publish:vsce
+```
+
+GitHub release flow:
+
+1. Merge the release branch into `main`.
+2. Create and push a tag such as `v0.2.2`.
+3. Let the `Release` GitHub Actions workflow build and attach `bin/daisyui-vscode-snippets.vsix`.
+
+Example:
+
+```bash
+git checkout main
+git pull --ff-only
+git tag v0.2.2
+git push origin v0.2.2
+```
 
 ## Git and Release Cycle
 

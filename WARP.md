@@ -43,6 +43,7 @@ npm run generate
 npm run validate
 npm run package:vsix
 npm run release:check
+npm run publish:precheck
 ```
 
 ## Release Checklist
@@ -52,3 +53,9 @@ npm run release:check
 3. Update `README.md`, `CHANGELOG.md`, and other relevant docs.
 4. Commit the `.vsix` only for milestone or release commits.
 5. Tag the release from `main`.
+
+## Publishing Notes
+
+- Use `npm run publish:precheck` before any Marketplace publish.
+- Use `npm run publish:vsce` only after authenticating with `npx @vscode/vsce login sjedt`.
+- Pushing a `v*` tag triggers the GitHub release workflow and uploads the `.vsix` artifact automatically.

@@ -2,7 +2,7 @@
   "name": "daisyui-vscode-snippets",
   "displayName": "DaisyUI Snippets",
   "description": "Curated DaisyUI HTML snippets for VS Code with predictable prefixes, valid markup, and editable placeholders.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publisher": "sjedt",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Jedt3D/daisyui-vscode-snippets",
@@ -37,6 +37,8 @@
     "build": "npm run generate && npm run validate",
     "package:vsix": "npm run build && npx @vscode/vsce package -o bin/daisyui-vscode-snippets.vsix",
     "release:check": "npm run build && npm run package:vsix",
+    "publish:precheck": "npm run release:check",
+    "publish:vsce": "npm run build && npx @vscode/vsce publish",
     "test": "npm run validate"
   },
   "contributes": {
