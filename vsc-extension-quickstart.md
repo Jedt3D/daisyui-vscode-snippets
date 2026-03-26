@@ -1,20 +1,42 @@
-# Welcome to your VS Code Extension
+# Development Quickstart
 
-## What's in the folder
-* This folder contains all of the files necessary for your extension
-* `package.json` - this is the manifest file that defines the location of the snippet file
-and specifies the language of the snippets
-* `snippets/snippets.json` - the file containing all snippets
+## Repo Layout
 
-## Get up and running straight away
-* press `F5` to open a new window with your extension loaded
-* create a new file with a file name suffix matching your language
-* verify that your snippets are proposed on intellisense
+- `src/snippet-catalog.mjs`: snippet source of truth
+- `scripts/generate-snippets.mjs`: builds the generated snippet file
+- `scripts/validate-snippets.mjs`: validates the catalog and generated output
+- `snippets/snippets.json`: generated VS Code snippet payload
 
-## Make changes
-* you can relaunch the extension from the debug toolbar after making changes to the files listed above
-* you can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes
+## Local Workflow
 
-## Install your extension
-* To start using your extension with Visual Studio Code copy it into the `<user home>/.vscode/extensions` folder and restart Code.
-* To share your extension with the world, read on https://code.visualstudio.com/docs about publishing an extension.
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Regenerate snippets after changing the catalog:
+
+```bash
+npm run generate
+```
+
+3. Validate the catalog and output:
+
+```bash
+npm run validate
+```
+
+4. Package the release artifact:
+
+```bash
+npm run package:vsix
+```
+
+## Manual Testing
+
+1. Open the repo in VS Code.
+2. Press `F5` to launch an Extension Development Host.
+3. Create an HTML file.
+4. Type prefixes such as `d-alert`, `d-card`, or `d-textarea`.
+5. Confirm placeholders tab in a sensible order and the resulting HTML is valid.
