@@ -42,11 +42,12 @@ npm install
 npm run generate
 npm run validate
 npm run package:vsix
+npm run release:check
 ```
 
 ## Release Checklist
 
-1. Run `npm run package:vsix`.
+1. Run `npm run release:check`.
 2. Verify the `.vsix` installs in VS Code.
 3. Update `README.md`, `CHANGELOG.md`, and other relevant docs.
 4. Commit the `.vsix` only for milestone or release commits.

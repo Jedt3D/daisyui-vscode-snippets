@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.2.1] - 2026-03-27
+
+- added GitHub Actions CI to generate, validate, and package the extension on each push and pull request
+- added `.npmignore` to keep npm tarballs focused on release-facing files
+- added `release:check` as the full local release gate
+
 ## [0.2.0] - 2026-03-27
 
 - promoted a second wave of common components into curated multi-variant snippets

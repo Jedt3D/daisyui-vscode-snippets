@@ -2,6 +2,12 @@
 
 Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, valid markup, and editable placeholders.
 
+## What Changed in `0.2.1`
+
+- Added GitHub Actions CI to generate, validate, and package the extension on every push and pull request.
+- Added `.npmignore` so npm tarballs stay focused on release-facing files instead of repo internals.
+- Added a `release:check` script for the full local release gate.
+
 ## What Changed in `0.2.0`
 
 - Promoted a second wave of common components into curated multi-variant snippets.
@@ -93,7 +99,28 @@ npm install
 npm run generate
 npm run validate
 npm run package:vsix
+npm run release:check
 ```
+
+## Release Checklist
+
+Use this flow before a Marketplace publish or release tag:
+
+1. Run `npm run release:check`.
+2. Install `bin/daisyui-vscode-snippets.vsix` locally with:
+   `code --install-extension bin/daisyui-vscode-snippets.vsix --force`
+3. Confirm the installed version matches `package.json`.
+4. Smoke-test key prefixes in an HTML file:
+   - `!d`
+   - `d-alert`
+   - `d-btn`
+   - `d-card-image`
+   - `d-dropdown`
+   - `d-modal`
+   - `d-navbar`
+   - `d-table-zebra`
+5. Update the changelog and release notes.
+6. Tag from `main` after the PR is merged.
 
 ## Git and Release Cycle
 
