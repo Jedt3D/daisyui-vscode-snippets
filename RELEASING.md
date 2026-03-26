@@ -41,6 +41,7 @@ PR body should include:
 - release impact: `minor`
 
 Use [release-notes/v0.2.2.md](./release-notes/v0.2.2.md) as the base for the summary.
+Use [release-notes/pr-v0.2.2.md](./release-notes/pr-v0.2.2.md) for a ready-to-paste PR title and body.
 
 ## Pre-Merge Commands
 
@@ -128,3 +129,8 @@ After publishing:
    - `d-tabs-lifted`
 4. create the next branch from updated `main`
 
+## Handy Files
+
+- release summary: [release-notes/v0.2.2.md](./release-notes/v0.2.2.md)
+- PR draft: [release-notes/pr-v0.2.2.md](./release-notes/pr-v0.2.2.md)
+- merge checklist: [release-notes/merge-checklist-v0.2.2.md](./release-notes/merge-checklist-v0.2.2.md)
