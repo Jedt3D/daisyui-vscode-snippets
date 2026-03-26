@@ -2,6 +2,10 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.1.1] - 2026-03-27
+
+- added the `!d` starter snippet for a full HTML document with DaisyUI and Tailwind browser CDN tags
+
 ## [0.1.0] - 2026-03-27
 
 - rebuilt the snippet library from a generated source catalog

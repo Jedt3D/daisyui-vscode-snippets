@@ -410,6 +410,40 @@ const curatedSnippets = [
 
 const fallbackSnippets = [
   defineSnippet({
+    component: "Document",
+    prefixes: ["!d"],
+    description: "Full HTML document starter with DaisyUI and Tailwind browser CDN links.",
+    body: String.raw`
+      <!doctype html>
+      <html lang="en" data-theme="\${1:light}">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>\${2:DaisyUI Starter}</title>
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+      </head>
+      <body class="min-h-screen bg-base-200">
+        <main class="mx-auto flex min-h-screen max-w-5xl items-center px-6 py-16">
+          <section class="hero w-full rounded-box bg-base-100 shadow-xl">
+            <div class="hero-content text-center">
+              <div class="max-w-2xl">
+                <span class="badge badge-primary badge-outline mb-4">\${3:DaisyUI + Tailwind CDN}</span>
+                <h1 class="text-4xl font-bold text-balance md:text-5xl">\${4:Build a polished UI quickly}</h1>
+                <p class="py-6 text-base-content/80">\${5:Start prototyping with DaisyUI components and Tailwind utilities in a single HTML file.}</p>
+                <div class="flex flex-col justify-center gap-3 sm:flex-row">
+                  <button type="button" class="btn btn-primary">\${6:Get started}</button>
+                  <button type="button" class="btn btn-outline">\${7:Open docs}</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </body>
+      </html>
+      $0`,
+  }),
+  defineSnippet({
     component: "Accordion",
     prefixes: ["d-accordion"],
     description: "Accordion group built with DaisyUI collapse items.",

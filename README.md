@@ -2,6 +2,10 @@
 
 Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, valid markup, and editable placeholders.
 
+## What Changed in `0.1.1`
+
+- Added `!d`, an HTML starter snippet that includes the current DaisyUI and Tailwind browser CDN setup.
+
 ## What Changed in `0.1.0`
 
 - Rebuilt the library around a generated snippet catalog.
@@ -29,6 +33,7 @@ Every snippet is designed for plain HTML workflows:
 ## Example Prefixes
 
 - `d-alert`
+- `!d`
 - `d-alert-info`
 - `d-badge-outline`
 - `d-button` or `d-btn`
