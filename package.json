@@ -1,29 +1,49 @@
 {
-    "name": "daisyui-vscode-snippets",
-    "displayName": "DaisyUI Snippets – Visual Studio Code Edition",
-    "description": "A collection of Visual Studio Code snippets useful for writing DaisyUI code.",
-    "version": "0.0.3",
-    "publisher": "sjedt",
-    "engines": {
-        "vscode": "^1.5.0"
-    },
-    "categories": [
-        "Snippets"
-    ],
-    "contributes": {
-        "snippets": [
-            {
-                "language": "html",
-                "path": "./snippets/snippets.json"
-            }
-        ]
-    },
-    "icon": "images/icon.png",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Jedt3D/daisyui-vscode-snippets.git"
-    },
-    "dependencies": {
-        "@vscode/vsce": "^3.6.0"
-    }
+  "name": "daisyui-vscode-snippets",
+  "displayName": "DaisyUI Snippets",
+  "description": "Curated DaisyUI HTML snippets for VS Code with predictable prefixes, valid markup, and editable placeholders.",
+  "version": "0.1.0",
+  "publisher": "sjedt",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Jedt3D/daisyui-vscode-snippets",
+  "bugs": {
+    "url": "https://github.com/Jedt3D/daisyui-vscode-snippets/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jedt3D/daisyui-vscode-snippets.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "keywords": [
+    "daisyui",
+    "tailwindcss",
+    "html",
+    "snippets",
+    "components",
+    "ui"
+  ],
+  "scripts": {
+    "generate": "node ./scripts/generate-snippets.mjs",
+    "validate": "node ./scripts/validate-snippets.mjs",
+    "build": "npm run generate && npm run validate",
+    "package:vsix": "npm run build && npx @vscode/vsce package -o bin/daisyui-vscode-snippets.vsix",
+    "test": "npm run validate"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "html",
+        "path": "./snippets/snippets.json"
+      }
+    ]
+  },
+  "icon": "images/icon.png",
+  "devDependencies": {
+    "@vscode/vsce": "^3.6.0"
+  }
 }

@@ -1,1 +1,10 @@
+.github/
+.idea/
+.gitignore
+src/
+scripts/
+improvement_plan.md
+WARP.md
+vsc-extension-quickstart.md
+package-lock.json
 node_modules/
