@@ -12,17 +12,56 @@ const componentCategories = {
   Actions: ["Button", "Dropdown", "Mask", "Modal", "Swap", "Theme Controller"],
 };
 
+const starterPrefixes = new Set([
+  "!d",
+  "d-alert",
+  "d-btn",
+  "d-card",
+  "d-dropdown",
+  "d-input",
+  "d-modal",
+  "d-navbar",
+  "d-table",
+  "d-textarea",
+]);
+
+function findCategory(component) {
+  for (const [category, components] of Object.entries(componentCategories)) {
+    if (components.includes(component)) {
+      return category;
+    }
+  }
+  return "Other";
+}
+
+function inferTier(entry) {
+  if (entry.prefixes.some((prefix) => starterPrefixes.has(prefix))) {
+    return "Starter";
+  }
+  if (entry.variant === "Default") {
+    return "Common";
+  }
+  return "Advanced";
+}
+
 const snippetEntries = Object.entries(snippets).map(([label, definition]) => {
   const [component, variant = "Default"] = label.split(": ");
   const prefixes = Array.isArray(definition.prefix) ? definition.prefix : [definition.prefix];
+  const body = Array.isArray(definition.body) ? definition.body.join("\n") : String(definition.body);
+  const category = findCategory(component);
+  const tier = inferTier({ prefixes, variant });
+
   return {
     label,
     component,
     variant,
     prefixes,
+    primaryPrefix: prefixes[0],
+    aliases: prefixes.slice(1),
     description: definition.description,
-    body: Array.isArray(definition.body) ? definition.body.join("\n") : String(definition.body),
-    category: findCategory(component),
+    body,
+    category,
+    tier,
   };
 });
 
@@ -34,18 +73,74 @@ function activate(context) {
     vscode.commands.registerCommand("daisyuiSnippets.insertSnippetByCategory", async () => {
       await pickCategoryAndInsertSnippet();
     }),
+    vscode.languages.registerCompletionItemProvider(
+      [{ language: "html", scheme: "file" }, { language: "html", scheme: "untitled" }],
+      {
+        provideCompletionItems(document, position) {
+          const linePrefix = document.lineAt(position).text.slice(0, position.character);
+          const tokenMatch = linePrefix.match(/[!A-Za-z0-9-]+$/);
+          const token = tokenMatch ? tokenMatch[0] : "";
+
+          const shouldSuggest = token === "d" || token.startsWith("d-") || token.startsWith("!");
+          if (!shouldSuggest) {
+            return undefined;
+          }
+
+          const range = tokenMatch
+            ? new vscode.Range(position.line, position.character - token.length, position.line, position.character)
+            : undefined;
+
+          return snippetEntries.map((entry) => createCompletionItem(entry, range));
+        },
+      },
+      "d",
+      "!",
+    ),
   );
 }
 
 function deactivate() {}
 
-function findCategory(component) {
-  for (const [category, components] of Object.entries(componentCategories)) {
-    if (components.includes(component)) {
-      return category;
-    }
+function createCompletionItem(entry, range) {
+  const item = new vscode.CompletionItem(entry.primaryPrefix, vscode.CompletionItemKind.Snippet);
+  item.insertText = new vscode.SnippetString(entry.body);
+  item.detail = `${entry.tier} • ${entry.category} • ${entry.label}`;
+  item.documentation = new vscode.MarkdownString(
+    [
+      `**${entry.label}**`,
+      "",
+      `${entry.description}`,
+      "",
+      `Prefixes: \`${entry.prefixes.join("`, `")}\``,
+      "",
+      "```html",
+      ...entry.body.split("\n"),
+      "```",
+    ].join("\n"),
+  );
+  item.filterText = [entry.primaryPrefix, ...entry.prefixes, entry.component, entry.variant, entry.category].join(" ");
+  item.sortText = `${tierRank(entry.tier)}-${entry.component}-${entry.variant}-${entry.primaryPrefix}`;
+  item.preselect = entry.tier === "Starter";
+  item.range = range;
+  item.keepWhitespace = true;
+  item.insertTextRules = vscode.CompletionItemInsertTextRule.InsertAsSnippet;
+  item.label = {
+    label: entry.primaryPrefix,
+    detail: entry.aliases.length ? ` (${entry.aliases.join(", ")})` : "",
+    description: `${entry.component} • ${entry.variant}`,
+  };
+  return item;
+}
+
+function tierRank(tier) {
+  switch (tier) {
+    case "Starter":
+      return "1";
+    case "Common":
+      return "2";
+    default:
+      return "3";
   }
-  return "Other";
 }
 
 async function pickAndInsertSnippet(category) {
@@ -58,9 +153,9 @@ async function pickAndInsertSnippet(category) {
   const entries = snippetEntries
     .filter((entry) => !category || entry.category === category)
     .sort((left, right) => {
-      const categoryCompare = left.category.localeCompare(right.category);
-      if (categoryCompare !== 0) {
-        return categoryCompare;
+      const tierCompare = tierRank(left.tier).localeCompare(tierRank(right.tier));
+      if (tierCompare !== 0) {
+        return tierCompare;
       }
       const componentCompare = left.component.localeCompare(right.component);
       if (componentCompare !== 0) {
@@ -72,7 +167,7 @@ async function pickAndInsertSnippet(category) {
   const selected = await vscode.window.showQuickPick(
     entries.map((entry) => ({
       label: entry.label,
-      description: `${entry.category} • ${entry.prefixes.join(", ")}`,
+      description: `${entry.tier} • ${entry.category} • ${entry.prefixes.join(", ")}`,
       detail: entry.description,
       entry,
     })),

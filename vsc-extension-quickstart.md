@@ -7,6 +7,7 @@
 - `scripts/validate-snippets.mjs`: validates the catalog and generated output
 - `snippets/snippets.json`: generated VS Code snippet payload
 - `extension.js`: command-palette entry point for searchable insertion and category browsing
+  - also provides ranked HTML completions for `d-` and `!`
 
 ## Local Workflow
 
@@ -43,3 +44,4 @@ npm run package:vsix
 5. Confirm placeholders tab in a sensible order and the resulting HTML is valid.
 6. Open the Command Palette and run `DaisyUI: Insert Snippet`.
 7. Open the Command Palette and run `DaisyUI: Browse Snippets by Category`.
+8. In an HTML file, type `d-` or `!` and confirm the richer completion entries appear with preview details.

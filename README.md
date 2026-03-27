@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.4.0`
+
+- Replaced passive static snippet suggestions with an HTML completion provider driven by the generated catalog.
+- Added richer completion labels, snippet previews, and starter/common/advanced ranking in the suggestion list.
+- Reduced duplicate suggestion noise while keeping the command-palette flows from `0.3.0`.
+
 ## What Changed in `0.3.0`
 
 - Added `DaisyUI: Insert Snippet`, a command-palette flow for searching snippets by component, variant, prefix, or description.
@@ -81,6 +87,14 @@ This release adds two faster discovery flows on top of normal snippet prefixes:
 - `DaisyUI: Browse Snippets by Category`
 
 Use them when you remember the kind of component you want, but not the exact prefix.
+
+## In-Editor Completions
+
+When you type `d-` or `!` inside an HTML file, the extension now provides:
+
+- ranked suggestions for starter, common, and advanced snippets
+- richer labels that show the component and variant
+- inline documentation with prefix aliases and snippet preview markup
 
 ## Example Prefixes
 

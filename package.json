@@ -2,7 +2,7 @@
   "name": "daisyui-vscode-snippets",
   "displayName": "DaisyUI HTML Snippets",
   "description": "Curated DaisyUI HTML snippets for VS Code with predictable prefixes, valid markup, and editable placeholders.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "sjedt",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Jedt3D/daisyui-vscode-snippets",
@@ -44,6 +44,7 @@
   },
   "main": "./extension.js",
   "activationEvents": [
+    "onLanguage:html",
     "onCommand:daisyuiSnippets.insertSnippet",
     "onCommand:daisyuiSnippets.insertSnippetByCategory"
   ],
@@ -58,12 +59,6 @@
         "command": "daisyuiSnippets.insertSnippetByCategory",
         "title": "DaisyUI: Browse Snippets by Category",
         "category": "DaisyUI"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "html",
-        "path": "./snippets/snippets.json"
       }
     ]
   },

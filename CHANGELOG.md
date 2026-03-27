@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.4.0] - 2026-03-27
+
+- replaced passive static snippet suggestions with an HTML completion provider backed by the generated snippet catalog
+- added richer completion labels, snippet previews, and starter/common/advanced ranking in the suggestion list
+- kept command-palette insertion while improving in-editor discoverability and reducing noisy duplicate suggestions
+
 ## [0.3.0] - 2026-03-27
 
 - added `DaisyUI: Insert Snippet`, a command palette flow for searching and inserting snippets by name, prefix, or description
