@@ -34,12 +34,20 @@ Current product goals:
   - stores curated snippet definitions with prefixes, descriptions, and snippet bodies
 - `src/html-upgrade-utils.js`
   - reusable HTML transformation helpers for the upgrade workflow
+- `src/extension-state-utils.js`
+  - reusable state and ordering helpers for favorites, recents, pickers, and completion ranking
 - `scripts/generate-snippets.mjs`
   - generates `snippets/snippets.json`
 - `scripts/validate-snippets.mjs`
   - validates prefix uniqueness, descriptions, placeholders, and basic HTML structure
 - `scripts/test-extension-helpers.js`
   - verifies the core HTML upgrade helpers
+- `scripts/test-extension-state-utils.js`
+  - verifies favorites, recents, picker ordering, and completion ranking logic
+- `scripts/test-upgrade-fixtures.js`
+  - runs fixture-based before/after checks for HTML upgrade flows
+- `scripts/check-vsix-contents.js`
+  - confirms the packaged extension includes required runtime files
 - `snippets/snippets.json`
   - generated output consumed by the VS Code extension manifest
 - `extension.js`
@@ -63,6 +71,7 @@ npm run generate
 npm run validate
 npm run test
 npm run package:vsix
+npm run test:smoke
 npm run release:check
 npm run publish:precheck
 ```

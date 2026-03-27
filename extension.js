@@ -6,6 +6,16 @@ const {
   getSelectionUpgrades,
   switchThemeInHtmlTag,
 } = require("./src/html-upgrade-utils.js");
+const {
+  buildCompletionSortText,
+  buildSnippetQuickPickItems,
+  favoriteBadge,
+  favoriteRank,
+  isFavorite,
+  recentRank,
+  sortSnippetEntries,
+  tierRank,
+} = require("./src/extension-state-utils.js");
 
 const FAVORITES_KEY = "daisyuiSnippets.favorites";
 const RECENTS_KEY = "daisyuiSnippets.recents";
@@ -517,10 +527,6 @@ function getRecents() {
   return extensionContext.globalState.get(RECENTS_KEY, []);
 }
 
-function isFavorite(prefix) {
-  return getFavorites().includes(prefix);
-}
-
 async function toggleFavorite(prefix) {
   const favorites = new Set(getFavorites());
   let message;
@@ -550,6 +556,8 @@ async function trackRecent(prefix) {
 }
 
 function createCompletionItem(entry, range) {
+  const favorites = getFavorites();
+  const recents = getRecents();
   const item = new vscode.CompletionItem(entry.primaryPrefix, vscode.CompletionItemKind.Snippet);
   item.insertText = new vscode.SnippetString(entry.body);
   item.detail = `${entry.tier} • ${entry.category} • ${entry.label}`;
@@ -561,7 +569,7 @@ function createCompletionItem(entry, range) {
       "",
       `Prefixes: \`${entry.prefixes.join("`, `")}\``,
       "",
-      `Favorite: ${isFavorite(entry.primaryPrefix) ? "Yes" : "No"}`,
+      `Favorite: ${isFavorite(entry.primaryPrefix, favorites) ? "Yes" : "No"}`,
       "",
       "```html",
       ...entry.body.split("\n"),
@@ -569,13 +577,13 @@ function createCompletionItem(entry, range) {
     ].join("\n"),
   );
   item.filterText = [entry.primaryPrefix, ...entry.prefixes, entry.component, entry.variant, entry.category].join(" ");
-  item.sortText = `${favoriteRank(entry)}-${recentRank(entry)}-${tierRank(entry.tier)}-${entry.component}-${entry.variant}-${entry.primaryPrefix}`;
-  item.preselect = isFavorite(entry.primaryPrefix) || entry.tier === "Starter";
+  item.sortText = buildCompletionSortText(entry, { favorites, recents });
+  item.preselect = isFavorite(entry.primaryPrefix, favorites) || entry.tier === "Starter";
   item.range = range;
   item.keepWhitespace = true;
   item.insertTextRules = vscode.CompletionItemInsertTextRule.InsertAsSnippet;
   item.label = {
-    label: favoriteBadge(entry) + entry.primaryPrefix,
+    label: favoriteBadge(entry, favorites) + entry.primaryPrefix,
     detail: entry.aliases.length ? ` (${entry.aliases.join(", ")})` : "",
     description: `${entry.component} • ${entry.variant}`,
   };
@@ -585,30 +593,6 @@ function createCompletionItem(entry, range) {
     arguments: [entry.primaryPrefix],
   };
   return item;
-}
-
-function favoriteBadge(entry) {
-  return isFavorite(entry.primaryPrefix) ? "★ " : "";
-}
-
-function favoriteRank(entry) {
-  return isFavorite(entry.primaryPrefix) ? "0" : "1";
-}
-
-function recentRank(entry) {
-  const index = getRecents().indexOf(entry.primaryPrefix);
-  return index === -1 ? "99" : String(index).padStart(2, "0");
-}
-
-function tierRank(tier) {
-  switch (tier) {
-    case "Starter":
-      return "1";
-    case "Common":
-      return "2";
-    default:
-      return "3";
-  }
 }
 
 async function pickCategory() {
@@ -650,33 +634,10 @@ async function pickSnippet(category, scope = "all") {
     return undefined;
   }
 
-  entries = entries.sort((left, right) => {
-    const favoriteCompare = favoriteRank(left).localeCompare(favoriteRank(right));
-    if (favoriteCompare !== 0 && scope === "all") {
-      return favoriteCompare;
-    }
-    const recentCompare = recentRank(left).localeCompare(recentRank(right));
-    if (recentCompare !== 0 && scope !== "favorite") {
-      return recentCompare;
-    }
-    const tierCompare = tierRank(left.tier).localeCompare(tierRank(right.tier));
-    if (tierCompare !== 0) {
-      return tierCompare;
-    }
-    const componentCompare = left.component.localeCompare(right.component);
-    if (componentCompare !== 0) {
-      return componentCompare;
-    }
-    return left.variant.localeCompare(right.variant);
-  });
+  entries = sortSnippetEntries(entries, { favorites: [...favorites], recents, scope });
 
   const selected = await vscode.window.showQuickPick(
-    entries.map((entry) => ({
-      label: `${favoriteBadge(entry)}${entry.label}`,
-      description: `${entry.tier} • ${entry.category} • ${entry.prefixes.join(", ")}`,
-      detail: entry.description,
-      entry,
-    })),
+    buildSnippetQuickPickItems(entries, { favorites: [...favorites] }),
     {
       title: getSnippetPickerTitle(category, scope),
       matchOnDescription: true,
@@ -939,7 +900,7 @@ function getPreviewHtml(webview, entry) {
   const renderedSnippet = snippetToRenderableHtml(entry.body);
   const escapedCode = escapeHtml(entry.body);
   const nonce = String(Date.now());
-  const favoriteLabel = isFavorite(entry.primaryPrefix) ? "Remove favorite" : "Save favorite";
+  const favoriteLabel = isFavorite(entry.primaryPrefix, getFavorites()) ? "Remove favorite" : "Save favorite";
 
   return `<!DOCTYPE html>
 <html lang="en">

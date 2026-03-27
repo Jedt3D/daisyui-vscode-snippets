@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [1.0.1] - 2026-03-27
+
+- added fixture-based upgrade regression tests for buttons, form controls, card wrapping, and theme switching
+- extracted snippet ranking and picker-order logic into reusable state utilities with automated coverage
+- strengthened the release gate with a packaged `.vsix` smoke check for required runtime files
+
 ## [1.0.0] - 2026-03-27
 
 - stabilized the extension around a clear HTML-first DaisyUI workflow: insert, preview, refine, and upgrade

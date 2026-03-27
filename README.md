@@ -19,6 +19,12 @@ This extension now has a clear workflow:
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `1.0.1`
+
+- Added fixture-based regression tests for button, form control, card-wrap, and theme-switch upgrade flows.
+- Added state-logic coverage for favorites, recents, picker ordering, and completion sort ranking.
+- Added a packaged `.vsix` smoke check so release verification now confirms runtime files are actually shipped.
+
 ## What Changed in `1.0.0`
 
 - Stabilized the extension around an HTML-first DaisyUI workflow: insert, preview, refine, and upgrade.
@@ -130,6 +136,12 @@ The product promise for `1.0.0` is simple:
 2. Preview snippets and presets before insertion.
 3. Refine the page with themes and section patterns.
 4. Upgrade existing HTML into DaisyUI-friendly structures.
+
+The quality promise for `1.0.1` adds:
+
+- fixture-based upgrade regression tests
+- state-logic coverage for snippet ranking and picker ordering
+- packaged artifact smoke checks before release
 
 ## Command Palette Workflow
 

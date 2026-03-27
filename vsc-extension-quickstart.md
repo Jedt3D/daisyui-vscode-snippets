@@ -4,9 +4,13 @@
 
 - `src/snippet-catalog.mjs`: snippet source of truth
 - `src/html-upgrade-utils.js`: reusable helpers for in-place HTML upgrades
+- `src/extension-state-utils.js`: reusable helpers for favorites, recents, and picker ordering
 - `scripts/generate-snippets.mjs`: builds the generated snippet file
 - `scripts/validate-snippets.mjs`: validates the catalog and generated output
 - `scripts/test-extension-helpers.js`: verifies upgrade helper behavior
+- `scripts/test-extension-state-utils.js`: verifies picker ordering and completion ranking
+- `scripts/test-upgrade-fixtures.js`: runs fixture-based before/after upgrade checks
+- `scripts/check-vsix-contents.js`: verifies packaged runtime files after `.vsix` build
 - `snippets/snippets.json`: generated VS Code snippet payload
 - `extension.js`: command-palette entry point for searchable insertion and category browsing
   - also provides ranked HTML completions for `d-` and `!`
@@ -36,7 +40,7 @@ npm run generate
 npm run validate
 ```
 
-4. Run the helper tests:
+4. Run the automated checks:
 
 ```bash
 npm run test
@@ -46,6 +50,12 @@ npm run test
 
 ```bash
 npm run package:vsix
+```
+
+6. Run the full release gate:
+
+```bash
+npm run release:check
 ```
 
 ## Manual Testing

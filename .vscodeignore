@@ -2,6 +2,7 @@
 .idea/
 .gitignore
 scripts/
+tests/
 improvement_plan.md
 WARP.md
 vsc-extension-quickstart.md
