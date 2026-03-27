@@ -5,6 +5,5 @@ improvement_plan.md
 node_modules/
 package-lock.json
 scripts/
-src/
 vsc-extension-quickstart.md
 WARP.md

@@ -6,6 +6,13 @@ This file documents the working conventions for this repository.
 
 This repository contains a VS Code snippet extension for DaisyUI HTML component scaffolding.
 
+The stabilized product promise is:
+
+- insert
+- preview
+- refine
+- upgrade
+
 Current product goals:
 
 - HTML-only scope
@@ -25,10 +32,14 @@ Current product goals:
 - `src/snippet-catalog.mjs`
   - source of truth for the snippet library
   - stores curated snippet definitions with prefixes, descriptions, and snippet bodies
+- `src/html-upgrade-utils.js`
+  - reusable HTML transformation helpers for the upgrade workflow
 - `scripts/generate-snippets.mjs`
   - generates `snippets/snippets.json`
 - `scripts/validate-snippets.mjs`
   - validates prefix uniqueness, descriptions, placeholders, and basic HTML structure
+- `scripts/test-extension-helpers.js`
+  - verifies the core HTML upgrade helpers
 - `snippets/snippets.json`
   - generated output consumed by the VS Code extension manifest
 - `extension.js`
@@ -50,6 +61,7 @@ Current product goals:
 npm install
 npm run generate
 npm run validate
+npm run test
 npm run package:vsix
 npm run release:check
 npm run publish:precheck

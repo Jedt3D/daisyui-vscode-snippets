@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [1.0.0] - 2026-03-27
+
+- stabilized the extension around a clear HTML-first DaisyUI workflow: insert, preview, refine, and upgrade
+- extracted HTML upgrade logic into a reusable helper module and added automated coverage for core transforms
+- tightened the local release gate so packaging now runs after generated snippet validation and helper tests
+
 ## [0.9.0] - 2026-03-27
 
 - added `DaisyUI: Upgrade Selected HTML` to inspect highlighted markup and apply DaisyUI-friendly upgrades in place

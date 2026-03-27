@@ -2,6 +2,13 @@
 
 Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, valid markup, and editable placeholders.
 
+This extension now has a clear workflow:
+
+- insert snippets and presets fast
+- preview before committing
+- refine page structure with themes and section patterns
+- upgrade existing HTML into DaisyUI-friendly markup
+
 ![Marketplace banner](./images/banner.png)
 
 ## Visual Preview
@@ -11,6 +18,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 ![Screenshot 1](./images/screenshot.jpg)
 
 ![Screenshot 2](./images/screenshot-2.jpg)
+
+## What Changed in `1.0.0`
+
+- Stabilized the extension around an HTML-first DaisyUI workflow: insert, preview, refine, and upgrade.
+- Added automated coverage for the core HTML upgrade helpers.
+- Tightened the release gate so validation and helper tests run before packaging.
 
 ## What Changed in `0.9.0`
 
@@ -108,6 +121,15 @@ Every snippet is designed for plain HTML workflows:
 - practical DaisyUI classes
 - editable placeholders
 - a useful final cursor position
+
+## Core Workflow
+
+The product promise for `1.0.0` is simple:
+
+1. Insert components or full-page presets.
+2. Preview snippets and presets before insertion.
+3. Refine the page with themes and section patterns.
+4. Upgrade existing HTML into DaisyUI-friendly structures.
 
 ## Command Palette Workflow
 

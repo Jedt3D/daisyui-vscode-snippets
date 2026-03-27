@@ -1,7 +1,6 @@
 .github/
 .idea/
 .gitignore
-src/
 scripts/
 improvement_plan.md
 WARP.md

@@ -3,8 +3,10 @@
 ## Repo Layout
 
 - `src/snippet-catalog.mjs`: snippet source of truth
+- `src/html-upgrade-utils.js`: reusable helpers for in-place HTML upgrades
 - `scripts/generate-snippets.mjs`: builds the generated snippet file
 - `scripts/validate-snippets.mjs`: validates the catalog and generated output
+- `scripts/test-extension-helpers.js`: verifies upgrade helper behavior
 - `snippets/snippets.json`: generated VS Code snippet payload
 - `extension.js`: command-palette entry point for searchable insertion and category browsing
   - also provides ranked HTML completions for `d-` and `!`
@@ -34,7 +36,13 @@ npm run generate
 npm run validate
 ```
 
-4. Package the release artifact:
+4. Run the helper tests:
+
+```bash
+npm run test
+```
+
+5. Package the release artifact:
 
 ```bash
 npm run package:vsix
