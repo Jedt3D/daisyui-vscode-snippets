@@ -18,7 +18,7 @@
   - also persists favorite and recent snippet memory in VS Code state
   - also provides preset page insertion for common full-page layouts
   - also provides theme switching and section-pattern refinement commands
-  - also upgrades selected HTML into DaisyUI-friendly markup
+  - also upgrades selected HTML into DaisyUI-friendly markup through a preview-first review flow
 
 ## Local Workflow
 
@@ -72,4 +72,5 @@ npm run release:check
 10. Mark a snippet as favorite, insert a few snippets, then verify `Insert Favorite Snippet` and `Insert Recent Snippet` show the expected memory.
 11. Run `DaisyUI: Insert Preset` and confirm the landing, dashboard, and auth presets insert full-page scaffolds.
 12. Run `DaisyUI: Preview Preset`, `DaisyUI: Switch Theme in Document`, and `DaisyUI: Insert Section Pattern` to validate the refinement workflow.
-13. Select existing HTML and run `DaisyUI: Upgrade Selected HTML` to verify in-place upgrades apply cleanly.
+13. Select existing HTML and run `DaisyUI: Upgrade Selected HTML` to verify the preview panel shows before/after code and rendered output.
+14. Modify the original selection after opening the preview, then click apply to confirm the stale-selection guard blocks the overwrite.

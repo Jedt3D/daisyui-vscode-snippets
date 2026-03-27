@@ -48,6 +48,8 @@ const starterPrefixes = new Set([
 let extensionContext;
 let snippetPreviewPanel;
 let presetPreviewPanel;
+let upgradePreviewPanel;
+let pendingUpgradeSession;
 
 const supportedThemes = ["light", "dark", "corporate", "emerald", "lofi", "synthwave"];
 
@@ -815,11 +817,18 @@ async function upgradeSelectedHtml() {
   }
 
   const nextText = choice.upgrade.apply(selectedText);
-  await editor.edit((editBuilder) => {
-    editBuilder.replace(editor.selection, nextText);
-  });
+  pendingUpgradeSession = {
+    documentUri: editor.document.uri.toString(),
+    startOffset: editor.document.offsetAt(editor.selection.start),
+    endOffset: editor.document.offsetAt(editor.selection.end),
+    originalText: selectedText,
+    nextText,
+    upgradeLabel: choice.upgrade.label,
+    upgradeDescription: choice.upgrade.description,
+    upgradeDetail: choice.upgrade.detail,
+  };
 
-  vscode.window.showInformationMessage(`Applied: ${choice.upgrade.label}`);
+  showUpgradePreview(pendingUpgradeSession);
 }
 
 function showSnippetPreview(entry) {
@@ -896,6 +905,80 @@ function showPresetPreview(preset) {
   presetPreviewPanel.reveal(vscode.ViewColumn.Beside);
 }
 
+function showUpgradePreview(session) {
+  if (!upgradePreviewPanel) {
+    upgradePreviewPanel = vscode.window.createWebviewPanel(
+      "daisyuiUpgradePreview",
+      `Upgrade ${session.upgradeLabel}`,
+      vscode.ViewColumn.Beside,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+      },
+    );
+
+    upgradePreviewPanel.onDidDispose(() => {
+      upgradePreviewPanel = undefined;
+      pendingUpgradeSession = undefined;
+    });
+
+    upgradePreviewPanel.webview.onDidReceiveMessage(async (message) => {
+      if (message.type === "applyUpgrade") {
+        await applyPendingUpgrade();
+      }
+
+      if (message.type === "copyUpgrade") {
+        if (pendingUpgradeSession) {
+          await vscode.env.clipboard.writeText(pendingUpgradeSession.nextText);
+          vscode.window.showInformationMessage("Copied upgraded HTML.");
+        }
+      }
+    });
+  }
+
+  upgradePreviewPanel.title = `Upgrade ${session.upgradeLabel}`;
+  upgradePreviewPanel.webview.html = getUpgradePreviewHtml(upgradePreviewPanel.webview, session);
+  upgradePreviewPanel.reveal(vscode.ViewColumn.Beside);
+}
+
+async function applyPendingUpgrade() {
+  if (!pendingUpgradeSession) {
+    vscode.window.showWarningMessage("No upgrade preview is ready to apply.");
+    return;
+  }
+
+  const editor = vscode.window.visibleTextEditors.find(
+    (item) => item.document.uri.toString() === pendingUpgradeSession.documentUri,
+  );
+
+  if (!editor) {
+    vscode.window.showWarningMessage("Open the original HTML document before applying this upgrade.");
+    return;
+  }
+
+  const start = editor.document.positionAt(pendingUpgradeSession.startOffset);
+  const end = editor.document.positionAt(pendingUpgradeSession.endOffset);
+  const range = new vscode.Range(start, end);
+  const currentText = editor.document.getText(range);
+
+  if (currentText !== pendingUpgradeSession.originalText) {
+    vscode.window.showWarningMessage(
+      "The selected HTML changed after the preview was created. Run the upgrade again to avoid overwriting newer edits.",
+    );
+    return;
+  }
+
+  await editor.edit((editBuilder) => {
+    editBuilder.replace(range, pendingUpgradeSession.nextText);
+  });
+
+  const nextEnd = editor.document.positionAt(
+    pendingUpgradeSession.startOffset + pendingUpgradeSession.nextText.length,
+  );
+  editor.selection = new vscode.Selection(start, nextEnd);
+  vscode.window.showInformationMessage(`Applied: ${pendingUpgradeSession.upgradeLabel}`);
+}
+
 function getPreviewHtml(webview, entry) {
   const renderedSnippet = snippetToRenderableHtml(entry.body);
   const escapedCode = escapeHtml(entry.body);
@@ -940,7 +1023,7 @@ function getPreviewHtml(webview, entry) {
           <span class="chip">${escapeHtml(entry.tier)}</span>
           <span class="chip">${escapeHtml(entry.category)}</span>
           <span class="chip">${escapeHtml(entry.primaryPrefix)}</span>
-          <span class="chip">${isFavorite(entry.primaryPrefix) ? "Favorite" : "Not favorite"}</span>
+          <span class="chip">${isFavorite(entry.primaryPrefix, getFavorites()) ? "Favorite" : "Not favorite"}</span>
         </div>
         <div class="preview-card">
           <h1>${escapeHtml(entry.label)}</h1>
@@ -979,6 +1062,110 @@ function getPreviewHtml(webview, entry) {
       });
       document.getElementById("favorite-button").addEventListener("click", () => {
         vscode.postMessage({ type: "toggleFavorite", prefix });
+      });
+    </script>
+  </body>
+</html>`;
+}
+
+function getUpgradePreviewHtml(webview, session) {
+  const escapedBefore = escapeHtml(session.originalText);
+  const escapedAfter = escapeHtml(session.nextText);
+  const renderedAfter = session.nextText;
+  const nonce = String(Date.now());
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src ${webview.cspSource} https: data:; style-src ${webview.cspSource} 'unsafe-inline' https://cdn.jsdelivr.net; script-src 'unsafe-inline' https://cdn.jsdelivr.net 'nonce-${nonce}';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script nonce="${nonce}" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; background: #f7f3eb; color: #2f241f; }
+      .shell { display: grid; grid-template-columns: minmax(360px, 1.2fr) 420px; min-height: 100vh; }
+      .preview-pane { padding: 24px; background: linear-gradient(180deg, #f8f5ee 0%, #efe7d7 100%); overflow: auto; }
+      .preview-card, .code-card { background: rgba(255,255,255,0.72); border: 1px solid rgba(111, 89, 67, 0.14); border-radius: 20px; box-shadow: 0 16px 40px rgba(92, 74, 56, 0.12); }
+      .preview-card, .code-card { padding: 18px; }
+      .meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+      .chip { border-radius: 999px; background: #fff2bf; border: 1px solid #f2c45f; padding: 6px 10px; font-size: 12px; font-weight: 700; }
+      .comparison { display: grid; gap: 16px; margin-top: 16px; }
+      .comparison-grid { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pane-label { margin: 0 0 10px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #7a5f4d; }
+      .code-block { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.55; color: #3e312b; }
+      .render-frame { border-radius: 18px; padding: 24px; min-height: 240px; background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,248,237,0.92)); }
+      .side-pane { padding: 24px 24px 24px 0; }
+      .side-stack { display: grid; gap: 16px; height: 100%; }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+      button { border: 0; border-radius: 12px; padding: 12px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+      .primary { background: #7db55b; color: #10210a; }
+      .secondary { background: #efe5d6; color: #5e4a3b; }
+      h1 { margin: 0 0 8px; font-size: 28px; }
+      p { margin: 0 0 12px; color: #5e4a3b; }
+      @media (max-width: 1100px) {
+        .shell { grid-template-columns: 1fr; }
+        .side-pane { padding: 0 24px 24px; }
+        .comparison-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="preview-pane">
+        <div class="meta">
+          <span class="chip">Upgrade preview</span>
+          <span class="chip">${escapeHtml(session.upgradeLabel)}</span>
+        </div>
+        <div class="preview-card">
+          <h1>${escapeHtml(session.upgradeLabel)}</h1>
+          <p>${escapeHtml(session.upgradeDescription)}</p>
+          <p>${escapeHtml(session.upgradeDetail)}</p>
+          <div class="comparison">
+            <div class="comparison-grid">
+              <div class="code-card">
+                <p class="pane-label">Before</p>
+                <pre class="code-block"><code>${escapedBefore}</code></pre>
+              </div>
+              <div class="code-card">
+                <p class="pane-label">After</p>
+                <pre class="code-block"><code>${escapedAfter}</code></pre>
+              </div>
+            </div>
+            <div class="code-card">
+              <p class="pane-label">Rendered result</p>
+              <div class="render-frame">
+                ${renderedAfter}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <aside class="side-pane">
+        <div class="side-stack">
+          <div class="code-card">
+            <p><strong>Safety check</strong></p>
+            <p>This upgrade only applies if the original selection is unchanged. If the document moves on after this preview, you’ll be asked to rerun the upgrade instead of overwriting newer edits.</p>
+          </div>
+          <div class="code-card">
+            <p><strong>Actions</strong></p>
+            <div class="actions">
+              <button class="primary" id="apply-button">Apply upgrade</button>
+              <button class="secondary" id="copy-button">Copy upgraded HTML</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <script nonce="${nonce}">
+      const vscode = acquireVsCodeApi();
+      document.getElementById("apply-button").addEventListener("click", () => {
+        vscode.postMessage({ type: "applyUpgrade" });
+      });
+      document.getElementById("copy-button").addEventListener("click", () => {
+        vscode.postMessage({ type: "copyUpgrade" });
       });
     </script>
   </body>

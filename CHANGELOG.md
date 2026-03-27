@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [1.1.0] - 2026-03-27
+
+- changed `DaisyUI: Upgrade Selected HTML` to a preview-first flow with before/after review
+- added a rendered upgrade preview panel with apply and copy actions
+- added a guarded apply step that refuses to overwrite the selection if the source HTML changed after preview
+
 ## [1.0.1] - 2026-03-27
 
 - added fixture-based upgrade regression tests for buttons, form controls, card wrapping, and theme switching

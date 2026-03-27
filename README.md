@@ -9,6 +9,12 @@ This extension now has a clear workflow:
 - refine page structure with themes and section patterns
 - upgrade existing HTML into DaisyUI-friendly markup
 
+The `1.1.0` release makes upgrades safer by default:
+
+- review before/after HTML before applying an upgrade
+- inspect a rendered preview of the upgraded selection
+- apply only if the original selection is still unchanged
+
 ![Marketplace banner](./images/banner.png)
 
 ## Visual Preview
@@ -18,6 +24,12 @@ This extension now has a clear workflow:
 ![Screenshot 1](./images/screenshot.jpg)
 
 ![Screenshot 2](./images/screenshot-2.jpg)
+
+## What Changed in `1.1.0`
+
+- Turned `DaisyUI: Upgrade Selected HTML` into a preview-first flow instead of an immediate transform.
+- Added a dedicated upgrade review panel with before/after code and rendered output.
+- Added a guarded apply step so the command will not overwrite a selection that changed after preview.
 
 ## What Changed in `1.0.1`
 
@@ -143,6 +155,12 @@ The quality promise for `1.0.1` adds:
 - state-logic coverage for snippet ranking and picker ordering
 - packaged artifact smoke checks before release
 
+The editing-safety promise for `1.1.0` adds:
+
+- upgrade preview before apply
+- rendered review for upgraded HTML
+- guarded apply if the source selection changed
+
 ## Command Palette Workflow
 
 This release adds two faster discovery flows on top of normal snippet prefixes:
@@ -206,10 +224,18 @@ The extension now helps refine pages after the first insert:
 
 You can now select existing markup and run `DaisyUI: Upgrade Selected HTML` to:
 
+- review the upgrade before anything is changed
 - turn plain buttons into DaisyUI buttons
 - upgrade form fields into DaisyUI form controls
 - upgrade plain tables into DaisyUI tables
 - wrap raw blocks in a card surface without rebuilding the content manually
+
+The upgrade preview now shows:
+
+- the original selected HTML
+- the upgraded output
+- a rendered result
+- a safety check that blocks apply if the source selection changed after preview
 
 ## Example Prefixes
 

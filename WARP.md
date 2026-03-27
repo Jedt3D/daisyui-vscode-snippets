@@ -24,6 +24,7 @@ Current product goals:
 - preset-based page composition
 - post-insert refinement actions
 - selected-html upgrade actions
+- preview-first selected-html upgrades
 - generated snippet output
 - release-ready packaging and docs
 
@@ -52,6 +53,7 @@ Current product goals:
   - generated output consumed by the VS Code extension manifest
 - `extension.js`
   - command-palette entry point, HTML completion provider, preview webview, and favorites/recents state
+  - also powers the preview-first HTML upgrade review flow
 - `package.json`
   - extension metadata plus build/package scripts
 
