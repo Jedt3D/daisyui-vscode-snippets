@@ -8,6 +8,7 @@
 - `snippets/snippets.json`: generated VS Code snippet payload
 - `extension.js`: command-palette entry point for searchable insertion and category browsing
   - also provides ranked HTML completions for `d-` and `!`
+  - also powers the preview webview workflow
 
 ## Local Workflow
 
@@ -45,3 +46,4 @@ npm run package:vsix
 6. Open the Command Palette and run `DaisyUI: Insert Snippet`.
 7. Open the Command Palette and run `DaisyUI: Browse Snippets by Category`.
 8. In an HTML file, type `d-` or `!` and confirm the richer completion entries appear with preview details.
+9. Run `DaisyUI: Preview Snippet` and confirm the rendered panel can insert the selected snippet into the editor.

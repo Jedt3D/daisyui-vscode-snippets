@@ -25,6 +25,58 @@ const starterPrefixes = new Set([
   "d-textarea",
 ]);
 
+function activate(context) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand("daisyuiSnippets.insertSnippet", async () => {
+      const selected = await pickSnippet();
+      if (selected) {
+        await insertSnippetIntoActiveEditor(selected);
+      }
+    }),
+    vscode.commands.registerCommand("daisyuiSnippets.insertSnippetByCategory", async () => {
+      const category = await pickCategory();
+      if (!category) {
+        return;
+      }
+      const selected = await pickSnippet(category);
+      if (selected) {
+        await insertSnippetIntoActiveEditor(selected);
+      }
+    }),
+    vscode.commands.registerCommand("daisyuiSnippets.previewSnippet", async () => {
+      const selected = await pickSnippet();
+      if (selected) {
+        showSnippetPreview(context, selected);
+      }
+    }),
+    vscode.languages.registerCompletionItemProvider(
+      [{ language: "html", scheme: "file" }, { language: "html", scheme: "untitled" }],
+      {
+        provideCompletionItems(document, position) {
+          const linePrefix = document.lineAt(position).text.slice(0, position.character);
+          const tokenMatch = linePrefix.match(/[!A-Za-z0-9-]+$/);
+          const token = tokenMatch ? tokenMatch[0] : "";
+          const shouldSuggest = token === "d" || token.startsWith("d-") || token.startsWith("!");
+
+          if (!shouldSuggest) {
+            return undefined;
+          }
+
+          const range = tokenMatch
+            ? new vscode.Range(position.line, position.character - token.length, position.line, position.character)
+            : undefined;
+
+          return snippetEntries.map((entry) => createCompletionItem(entry, range));
+        },
+      },
+      "d",
+      "!",
+    ),
+  );
+}
+
+function deactivate() {}
+
 function findCategory(component) {
   for (const [category, components] of Object.entries(componentCategories)) {
     if (components.includes(component)) {
@@ -64,42 +116,6 @@ const snippetEntries = Object.entries(snippets).map(([label, definition]) => {
     tier,
   };
 });
-
-function activate(context) {
-  context.subscriptions.push(
-    vscode.commands.registerCommand("daisyuiSnippets.insertSnippet", async () => {
-      await pickAndInsertSnippet();
-    }),
-    vscode.commands.registerCommand("daisyuiSnippets.insertSnippetByCategory", async () => {
-      await pickCategoryAndInsertSnippet();
-    }),
-    vscode.languages.registerCompletionItemProvider(
-      [{ language: "html", scheme: "file" }, { language: "html", scheme: "untitled" }],
-      {
-        provideCompletionItems(document, position) {
-          const linePrefix = document.lineAt(position).text.slice(0, position.character);
-          const tokenMatch = linePrefix.match(/[!A-Za-z0-9-]+$/);
-          const token = tokenMatch ? tokenMatch[0] : "";
-
-          const shouldSuggest = token === "d" || token.startsWith("d-") || token.startsWith("!");
-          if (!shouldSuggest) {
-            return undefined;
-          }
-
-          const range = tokenMatch
-            ? new vscode.Range(position.line, position.character - token.length, position.line, position.character)
-            : undefined;
-
-          return snippetEntries.map((entry) => createCompletionItem(entry, range));
-        },
-      },
-      "d",
-      "!",
-    ),
-  );
-}
-
-function deactivate() {}
 
 function createCompletionItem(entry, range) {
   const item = new vscode.CompletionItem(entry.primaryPrefix, vscode.CompletionItemKind.Snippet);
@@ -143,13 +159,23 @@ function tierRank(tier) {
   }
 }
 
-async function pickAndInsertSnippet(category) {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) {
-    vscode.window.showWarningMessage("Open an HTML file before inserting a DaisyUI snippet.");
-    return;
-  }
+async function pickCategory() {
+  const categories = [...new Set(snippetEntries.map((entry) => entry.category))].sort();
+  const selected = await vscode.window.showQuickPick(
+    categories.map((category) => ({
+      label: category,
+      description: `${snippetEntries.filter((entry) => entry.category === category).length} snippets`,
+    })),
+    {
+      title: "Browse DaisyUI Snippets by Category",
+      placeHolder: "Choose a category",
+    },
+  );
 
+  return selected ? selected.label : undefined;
+}
+
+async function pickSnippet(category) {
   const entries = snippetEntries
     .filter((entry) => !category || entry.category === category)
     .sort((left, right) => {
@@ -172,7 +198,7 @@ async function pickAndInsertSnippet(category) {
       entry,
     })),
     {
-      title: category ? `Insert DaisyUI Snippet: ${category}` : "Insert DaisyUI Snippet",
+      title: category ? `Choose DaisyUI Snippet: ${category}` : "Choose DaisyUI Snippet",
       matchOnDescription: true,
       matchOnDetail: true,
       placeHolder: category
@@ -181,31 +207,237 @@ async function pickAndInsertSnippet(category) {
     },
   );
 
-  if (!selected) {
+  return selected ? selected.entry : undefined;
+}
+
+async function insertSnippetIntoActiveEditor(entry) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage("Open an HTML file before inserting a DaisyUI snippet.");
     return;
   }
 
-  await editor.insertSnippet(new vscode.SnippetString(selected.entry.body));
+  await editor.insertSnippet(new vscode.SnippetString(entry.body));
 }
 
-async function pickCategoryAndInsertSnippet() {
-  const categories = [...new Set(snippetEntries.map((entry) => entry.category))].sort();
-  const selected = await vscode.window.showQuickPick(
-    categories.map((category) => ({
-      label: category,
-      description: `${snippetEntries.filter((entry) => entry.category === category).length} snippets`,
-    })),
+function showSnippetPreview(context, entry) {
+  const panel = vscode.window.createWebviewPanel(
+    "daisyuiSnippetPreview",
+    `Preview ${entry.primaryPrefix}`,
+    vscode.ViewColumn.Beside,
     {
-      title: "Browse DaisyUI Snippets by Category",
-      placeHolder: "Choose a category",
+      enableScripts: true,
+      retainContextWhenHidden: true,
     },
   );
 
-  if (!selected) {
-    return;
-  }
+  panel.webview.html = getPreviewHtml(panel.webview, entry);
 
-  await pickAndInsertSnippet(selected.label);
+  panel.webview.onDidReceiveMessage(
+    async (message) => {
+      if (message.type === "insert") {
+        await insertSnippetIntoActiveEditor(entry);
+        vscode.window.showInformationMessage(`Inserted ${entry.primaryPrefix}`);
+      }
+
+      if (message.type === "copyPrefix") {
+        await vscode.env.clipboard.writeText(entry.primaryPrefix);
+        vscode.window.showInformationMessage(`Copied ${entry.primaryPrefix}`);
+      }
+    },
+    undefined,
+    context.subscriptions,
+  );
+}
+
+function getPreviewHtml(webview, entry) {
+  const renderedSnippet = snippetToRenderableHtml(entry.body);
+  const escapedCode = escapeHtml(entry.body);
+  const nonce = String(Date.now());
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src ${webview.cspSource} https: data:; style-src ${webview.cspSource} 'unsafe-inline' https://cdn.jsdelivr.net; script-src 'unsafe-inline' https://cdn.jsdelivr.net 'nonce-${nonce}';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script nonce="${nonce}" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: #f7f3eb;
+        color: #2f241f;
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: minmax(320px, 1fr) 420px;
+        min-height: 100vh;
+      }
+
+      .preview-pane {
+        padding: 24px;
+        background: linear-gradient(180deg, #f8f5ee 0%, #efe7d7 100%);
+      }
+
+      .preview-card,
+      .code-card {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(111, 89, 67, 0.14);
+        border-radius: 20px;
+        box-shadow: 0 16px 40px rgba(92, 74, 56, 0.12);
+      }
+
+      .preview-card {
+        padding: 18px;
+      }
+
+      .meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 0 0 16px;
+      }
+
+      .chip {
+        border-radius: 999px;
+        background: #fff2bf;
+        border: 1px solid #f2c45f;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .preview-frame {
+        border-radius: 18px;
+        padding: 24px;
+        min-height: 320px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,248,237,0.92));
+      }
+
+      .side-pane {
+        padding: 24px 24px 24px 0;
+      }
+
+      .side-stack {
+        display: grid;
+        gap: 16px;
+        height: 100%;
+      }
+
+      .code-card {
+        padding: 20px;
+        overflow: auto;
+      }
+
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 13px;
+        line-height: 1.55;
+        color: #3e312b;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .primary {
+        background: #7db55b;
+        color: #10210a;
+      }
+
+      .secondary {
+        background: #efe5d6;
+        color: #5e4a3b;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+
+      p {
+        margin: 0 0 12px;
+        color: #5e4a3b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="preview-pane">
+        <div class="meta">
+          <span class="chip">${escapeHtml(entry.tier)}</span>
+          <span class="chip">${escapeHtml(entry.category)}</span>
+          <span class="chip">${escapeHtml(entry.primaryPrefix)}</span>
+        </div>
+        <div class="preview-card">
+          <h1>${escapeHtml(entry.label)}</h1>
+          <p>${escapeHtml(entry.description)}</p>
+          <div class="preview-frame">
+            ${renderedSnippet}
+          </div>
+        </div>
+      </section>
+      <aside class="side-pane">
+        <div class="side-stack">
+          <div class="code-card">
+            <p><strong>Prefixes</strong></p>
+            <p>${escapeHtml(entry.prefixes.join(", "))}</p>
+            <pre><code>${escapedCode}</code></pre>
+          </div>
+          <div class="code-card">
+            <p><strong>Actions</strong></p>
+            <div class="actions">
+              <button class="primary" id="insert-button">Insert into editor</button>
+              <button class="secondary" id="copy-button">Copy prefix</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <script nonce="${nonce}">
+      const vscode = acquireVsCodeApi();
+      document.getElementById("insert-button").addEventListener("click", () => {
+        vscode.postMessage({ type: "insert" });
+      });
+      document.getElementById("copy-button").addEventListener("click", () => {
+        vscode.postMessage({ type: "copyPrefix" });
+      });
+    </script>
+  </body>
+</html>`;
+}
+
+function snippetToRenderableHtml(snippetBody) {
+  return snippetBody
+    .replace(/\$\{(\d+):([^}]+)\}/g, "$2")
+    .replace(/\$\{(\d+)\}/g, "")
+    .replace(/\$0/g, "");
+}
+
+function escapeHtml(value) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 module.exports = {

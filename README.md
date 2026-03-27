@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.5.0`
+
+- Added `DaisyUI: Preview Snippet`, a rendered preview panel for checking a snippet before inserting it.
+- Added insert and copy-prefix actions directly inside the preview panel.
+- Pushed the extension beyond completion quality into a more product-like preview workflow.
+
 ## What Changed in `0.4.0`
 
 - Replaced passive static snippet suggestions with an HTML completion provider driven by the generated catalog.
@@ -85,6 +91,7 @@ This release adds two faster discovery flows on top of normal snippet prefixes:
 
 - `DaisyUI: Insert Snippet`
 - `DaisyUI: Browse Snippets by Category`
+- `DaisyUI: Preview Snippet`
 
 Use them when you remember the kind of component you want, but not the exact prefix.
 
@@ -95,6 +102,14 @@ When you type `d-` or `!` inside an HTML file, the extension now provides:
 - ranked suggestions for starter, common, and advanced snippets
 - richer labels that show the component and variant
 - inline documentation with prefix aliases and snippet preview markup
+
+## Preview Before Insert
+
+Run `DaisyUI: Preview Snippet` to:
+
+- render the chosen snippet in a dedicated preview panel
+- inspect the generated HTML beside the rendered output
+- insert the snippet into the active editor only when it looks right
 
 ## Example Prefixes
 

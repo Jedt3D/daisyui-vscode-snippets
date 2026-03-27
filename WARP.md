@@ -12,6 +12,7 @@ Current product goals:
 - curated snippet UX
 - command-palette discovery
 - richer in-editor completions
+- preview before insert
 - generated snippet output
 - release-ready packaging and docs
 
@@ -27,7 +28,7 @@ Current product goals:
 - `snippets/snippets.json`
   - generated output consumed by the VS Code extension manifest
 - `extension.js`
-  - command-palette entry point plus HTML completion provider
+  - command-palette entry point, HTML completion provider, and preview webview
 - `package.json`
   - extension metadata plus build/package scripts
 

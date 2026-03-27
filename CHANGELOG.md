@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.5.0] - 2026-03-27
+
+- added `DaisyUI: Preview Snippet`, a webview-based preview panel that renders the selected snippet before insertion
+- added insert and copy-prefix actions directly inside the preview panel
+- extended the extension from ranked completions into a more product-like preview and insertion workflow
+
 ## [0.4.0] - 2026-03-27
 
 - replaced passive static snippet suggestions with an HTML completion provider backed by the generated snippet catalog
