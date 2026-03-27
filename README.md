@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.8.0`
+
+- Added `DaisyUI: Preview Preset` so full-page scaffolds can be reviewed before insertion.
+- Added `DaisyUI: Switch Theme in Document` for fast retheming of the active HTML file.
+- Added `DaisyUI: Insert Section Pattern` with reusable hero, grid, stat, and CTA sections.
+
 ## What Changed in `0.7.0`
 
 - Added themed document starters like `!d-dark` and `!d-corporate`.
@@ -108,6 +114,9 @@ This release adds two faster discovery flows on top of normal snippet prefixes:
 - `DaisyUI: Insert Favorite Snippet`
 - `DaisyUI: Toggle Favorite Snippet`
 - `DaisyUI: Insert Preset`
+- `DaisyUI: Preview Preset`
+- `DaisyUI: Switch Theme in Document`
+- `DaisyUI: Insert Section Pattern`
 
 Use them when you remember the kind of component you want, but not the exact prefix.
 
@@ -143,6 +152,14 @@ The extension now includes higher-level building blocks:
 - `!d-dark` for a darker product/demo surface
 - `!d-corporate` for a more structured product or internal-tool shell
 - `DaisyUI: Insert Preset` for landing page, dashboard, and auth scaffolds
+
+## Refine After Insert
+
+The extension now helps refine pages after the first insert:
+
+- preview full-page presets before inserting them
+- switch the active document theme without hand-editing `data-theme`
+- drop in reusable section patterns to evolve a rough page faster
 
 ## Example Prefixes
 

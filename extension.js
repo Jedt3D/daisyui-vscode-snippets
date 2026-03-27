@@ -33,6 +33,9 @@ const starterPrefixes = new Set([
 
 let extensionContext;
 let snippetPreviewPanel;
+let presetPreviewPanel;
+
+const supportedThemes = ["light", "dark", "corporate", "emerald", "lofi", "synthwave"];
 
 function activate(context) {
   extensionContext = context;
@@ -84,6 +87,21 @@ function activate(context) {
         return;
       }
       await insertPresetIntoActiveEditor(preset);
+    }),
+    vscode.commands.registerCommand("daisyuiSnippets.previewPreset", async () => {
+      const preset = await pickPreset();
+      if (preset) {
+        showPresetPreview(preset);
+      }
+    }),
+    vscode.commands.registerCommand("daisyuiSnippets.switchTheme", async () => {
+      await switchThemeInDocument();
+    }),
+    vscode.commands.registerCommand("daisyuiSnippets.insertSectionPattern", async () => {
+      const pattern = await pickSectionPattern();
+      if (pattern) {
+        await insertSectionPatternIntoEditor(pattern);
+      }
     }),
     vscode.commands.registerCommand("daisyuiSnippets._trackRecentInternal", async (prefix) => {
       await trackRecent(prefix);
@@ -401,6 +419,93 @@ const presets = [
   },
 ];
 
+const sectionPatterns = [
+  {
+    key: "hero-split",
+    label: "Hero Split",
+    description: "Two-column hero with image and CTA.",
+    body: String.raw`<section class="hero rounded-box bg-base-100 shadow-xl">
+  <div class="hero-content flex-col gap-10 py-12 lg:flex-row-reverse">
+    <img src="\${1:https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80}" alt="\${2:Feature image}" class="max-w-sm rounded-2xl shadow-2xl" />
+    <div>
+      <span class="badge badge-primary badge-outline mb-4">\${3:Now shipping}</span>
+      <h1 class="text-5xl font-bold text-balance">\${4:Design polished HTML experiences faster}</h1>
+      <p class="py-6 text-lg text-base-content/75">\${5:Use DaisyUI components and Tailwind utilities to build a strong first impression.}</p>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <button type="button" class="btn btn-primary btn-lg">\${6:Get started}</button>
+        <button type="button" class="btn btn-outline btn-lg">\${7:View examples}</button>
+      </div>
+    </div>
+  </div>
+</section>
+$0`,
+  },
+  {
+    key: "card-grid",
+    label: "Card Grid",
+    description: "Three-card feature section for product or marketing pages.",
+    body: String.raw`<section class="grid gap-6 md:grid-cols-3">
+  <article class="card bg-base-100 shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title">\${1:Faster setup}</h2>
+      <p>\${2:Start with strong defaults instead of rebuilding common UI patterns.}</p>
+    </div>
+  </article>
+  <article class="card bg-base-100 shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title">\${3:Better iteration}</h2>
+      <p>\${4:Preview, favorite, and revisit the snippets you actually use most.}</p>
+    </div>
+  </article>
+  <article class="card bg-base-100 shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title">\${5:Cleaner delivery}</h2>
+      <p>\${6:Compose polished sections without leaving plain HTML workflows.}</p>
+    </div>
+  </article>
+</section>
+$0`,
+  },
+  {
+    key: "stats-row",
+    label: "Stats Row",
+    description: "Three-stat overview for dashboards and KPI headers.",
+    body: String.raw`<section class="grid gap-4 md:grid-cols-3">
+  <div class="stat rounded-box bg-base-100 shadow-sm">
+    <div class="stat-title">\${1:Monthly revenue}</div>
+    <div class="stat-value text-primary">\${2:$48.2K}</div>
+    <div class="stat-desc">\${3:+14% from last month}</div>
+  </div>
+  <div class="stat rounded-box bg-base-100 shadow-sm">
+    <div class="stat-title">\${4:Active users}</div>
+    <div class="stat-value">\${5:8,420}</div>
+    <div class="stat-desc">\${6:+320 this week}</div>
+  </div>
+  <div class="stat rounded-box bg-base-100 shadow-sm">
+    <div class="stat-title">\${7:Open issues}</div>
+    <div class="stat-value text-warning">\${8:17}</div>
+    <div class="stat-desc">\${9:Needs follow-up today}</div>
+  </div>
+</section>
+$0`,
+  },
+  {
+    key: "cta-banner",
+    label: "CTA Banner",
+    description: "Bold call-to-action strip for the end of a page.",
+    body: String.raw`<section class="rounded-box bg-primary p-10 text-primary-content shadow-xl">
+  <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+    <div>
+      <p class="text-sm uppercase tracking-[0.2em]">\${1:Ready to launch}</p>
+      <h2 class="text-3xl font-bold">\${2:Ship your next page with less setup}</h2>
+    </div>
+    <button type="button" class="btn btn-neutral btn-lg">\${3:Claim your starter}</button>
+  </div>
+</section>
+$0`,
+  },
+];
+
 function getRecents() {
   return extensionContext.globalState.get(RECENTS_KEY, []);
 }
@@ -615,6 +720,23 @@ async function pickPreset() {
   return selected ? selected.preset : undefined;
 }
 
+async function pickSectionPattern() {
+  const selected = await vscode.window.showQuickPick(
+    sectionPatterns.map((pattern) => ({
+      label: pattern.label,
+      description: pattern.description,
+      pattern,
+    })),
+    {
+      title: "Insert DaisyUI Section Pattern",
+      matchOnDescription: true,
+      placeHolder: "Choose a section pattern",
+    },
+  );
+
+  return selected ? selected.pattern : undefined;
+}
+
 async function insertSnippetIntoActiveEditor(entry) {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -634,6 +756,66 @@ async function insertPresetIntoActiveEditor(preset) {
   }
 
   await editor.insertSnippet(new vscode.SnippetString(preset.body));
+}
+
+async function insertSectionPatternIntoEditor(pattern) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage("Open an HTML file before inserting a section pattern.");
+    return;
+  }
+
+  const targetRange = editor.selection && !editor.selection.isEmpty ? editor.selection : undefined;
+  await editor.insertSnippet(new vscode.SnippetString(pattern.body), targetRange);
+}
+
+async function switchThemeInDocument() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage("Open an HTML file before switching DaisyUI themes.");
+    return;
+  }
+
+  const selectedTheme = await vscode.window.showQuickPick(
+    supportedThemes.map((theme) => ({ label: theme })),
+    {
+      title: "Switch DaisyUI Theme",
+      placeHolder: "Choose a theme for the current document",
+    },
+  );
+
+  if (!selectedTheme) {
+    return;
+  }
+
+  const documentText = editor.document.getText();
+  const htmlTagMatch = documentText.match(/<html\b[^>]*>/i);
+
+  if (!htmlTagMatch) {
+    vscode.window.showWarningMessage("Could not find an <html> tag in the active document.");
+    return;
+  }
+
+  const currentTag = htmlTagMatch[0];
+  let nextTag;
+  if (/data-theme\s*=\s*["'][^"']+["']/i.test(currentTag)) {
+    nextTag = currentTag.replace(/data-theme\s*=\s*["'][^"']+["']/i, `data-theme="${selectedTheme.label}"`);
+  } else {
+    nextTag = currentTag.replace(/<html\b/i, `<html data-theme="${selectedTheme.label}"`);
+  }
+
+  const startOffset = htmlTagMatch.index || 0;
+  const endOffset = startOffset + currentTag.length;
+  const range = new vscode.Range(
+    editor.document.positionAt(startOffset),
+    editor.document.positionAt(endOffset),
+  );
+
+  await editor.edit((editBuilder) => {
+    editBuilder.replace(range, nextTag);
+  });
+
+  vscode.window.showInformationMessage(`Switched document theme to ${selectedTheme.label}.`);
 }
 
 function showSnippetPreview(entry) {
@@ -676,6 +858,38 @@ function showSnippetPreview(entry) {
   snippetPreviewPanel.webview.html = getPreviewHtml(snippetPreviewPanel.webview, entry);
   snippetPreviewPanel.reveal(vscode.ViewColumn.Beside);
   trackRecent(entry.primaryPrefix);
+}
+
+function showPresetPreview(preset) {
+  if (!presetPreviewPanel) {
+    presetPreviewPanel = vscode.window.createWebviewPanel(
+      "daisyuiPresetPreview",
+      `Preset ${preset.label}`,
+      vscode.ViewColumn.Beside,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true,
+      },
+    );
+
+    presetPreviewPanel.onDidDispose(() => {
+      presetPreviewPanel = undefined;
+    });
+
+    presetPreviewPanel.webview.onDidReceiveMessage(async (message) => {
+      if (message.type === "insertPreset") {
+        const selected = presets.find((item) => item.key === message.key);
+        if (selected) {
+          await insertPresetIntoActiveEditor(selected);
+          vscode.window.showInformationMessage(`Inserted ${selected.label} preset`);
+        }
+      }
+    });
+  }
+
+  presetPreviewPanel.title = `Preset ${preset.label}`;
+  presetPreviewPanel.webview.html = getPresetPreviewHtml(presetPreviewPanel.webview, preset);
+  presetPreviewPanel.reveal(vscode.ViewColumn.Beside);
 }
 
 function getPreviewHtml(webview, entry) {
@@ -761,6 +975,83 @@ function getPreviewHtml(webview, entry) {
       });
       document.getElementById("favorite-button").addEventListener("click", () => {
         vscode.postMessage({ type: "toggleFavorite", prefix });
+      });
+    </script>
+  </body>
+</html>`;
+}
+
+function getPresetPreviewHtml(webview, preset) {
+  const renderedSnippet = snippetToRenderableHtml(preset.body);
+  const escapedCode = escapeHtml(preset.body);
+  const nonce = String(Date.now());
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src ${webview.cspSource} https: data:; style-src ${webview.cspSource} 'unsafe-inline' https://cdn.jsdelivr.net; script-src 'unsafe-inline' https://cdn.jsdelivr.net 'nonce-${nonce}';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script nonce="${nonce}" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; background: #f7f3eb; color: #2f241f; }
+      .shell { display: grid; grid-template-columns: minmax(320px, 1fr) 420px; min-height: 100vh; }
+      .preview-pane { padding: 24px; background: linear-gradient(180deg, #f8f5ee 0%, #efe7d7 100%); overflow: auto; }
+      .preview-card, .code-card { background: rgba(255,255,255,0.72); border: 1px solid rgba(111, 89, 67, 0.14); border-radius: 20px; box-shadow: 0 16px 40px rgba(92, 74, 56, 0.12); }
+      .preview-card { padding: 18px; }
+      .meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+      .chip { border-radius: 999px; background: #fff2bf; border: 1px solid #f2c45f; padding: 6px 10px; font-size: 12px; font-weight: 700; }
+      .preview-frame { border-radius: 18px; padding: 24px; min-height: 320px; background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,248,237,0.92)); }
+      .side-pane { padding: 24px 24px 24px 0; }
+      .side-stack { display: grid; gap: 16px; height: 100%; }
+      .code-card { padding: 20px; overflow: auto; }
+      pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.55; color: #3e312b; }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+      button { border: 0; border-radius: 12px; padding: 12px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+      .primary { background: #7db55b; color: #10210a; }
+      h1 { margin: 0 0 8px; font-size: 28px; }
+      p { margin: 0 0 12px; color: #5e4a3b; }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="preview-pane">
+        <div class="meta">
+          <span class="chip">Preset</span>
+          <span class="chip">${escapeHtml(preset.label)}</span>
+        </div>
+        <div class="preview-card">
+          <h1>${escapeHtml(preset.label)}</h1>
+          <p>${escapeHtml(preset.description)}</p>
+          <div class="preview-frame">
+            ${renderedSnippet}
+          </div>
+        </div>
+      </section>
+      <aside class="side-pane">
+        <div class="side-stack">
+          <div class="code-card">
+            <p><strong>Preset details</strong></p>
+            <p>${escapeHtml(preset.detail)}</p>
+            <pre><code>${escapedCode}</code></pre>
+          </div>
+          <div class="code-card">
+            <p><strong>Actions</strong></p>
+            <div class="actions">
+              <button class="primary" id="insert-button">Insert preset</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <script nonce="${nonce}">
+      const vscode = acquireVsCodeApi();
+      const key = ${JSON.stringify(preset.key)};
+      document.getElementById("insert-button").addEventListener("click", () => {
+        vscode.postMessage({ type: "insertPreset", key });
       });
     </script>
   </body>

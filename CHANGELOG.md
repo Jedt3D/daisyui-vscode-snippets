@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.8.0] - 2026-03-27
+
+- added `DaisyUI: Preview Preset` for rendered page-preset review before insertion
+- added `DaisyUI: Switch Theme in Document` to retheme the active HTML document quickly
+- added `DaisyUI: Insert Section Pattern` for hero, card grid, stats row, and CTA section transformations
+
 ## [0.7.0] - 2026-03-27
 
 - added theme-aware starter variants including `!d-dark` and `!d-corporate`

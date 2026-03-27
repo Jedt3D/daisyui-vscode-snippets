@@ -15,6 +15,7 @@ Current product goals:
 - preview before insert
 - favorites and recents memory
 - preset-based page composition
+- post-insert refinement actions
 - generated snippet output
 - release-ready packaging and docs
 

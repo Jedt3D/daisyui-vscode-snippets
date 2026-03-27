@@ -2,7 +2,7 @@
   "name": "daisyui-vscode-snippets",
   "displayName": "DaisyUI HTML Snippets",
   "description": "Curated DaisyUI HTML snippets for VS Code with predictable prefixes, valid markup, and editable placeholders.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publisher": "sjedt",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Jedt3D/daisyui-vscode-snippets",
@@ -51,7 +51,10 @@
     "onCommand:daisyuiSnippets.insertRecentSnippet",
     "onCommand:daisyuiSnippets.insertFavoriteSnippet",
     "onCommand:daisyuiSnippets.toggleFavoriteSnippet",
-    "onCommand:daisyuiSnippets.insertPreset"
+    "onCommand:daisyuiSnippets.insertPreset",
+    "onCommand:daisyuiSnippets.previewPreset",
+    "onCommand:daisyuiSnippets.switchTheme",
+    "onCommand:daisyuiSnippets.insertSectionPattern"
   ],
   "contributes": {
     "commands": [
@@ -88,6 +91,21 @@
       {
         "command": "daisyuiSnippets.insertPreset",
         "title": "DaisyUI: Insert Preset",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.previewPreset",
+        "title": "DaisyUI: Preview Preset",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.switchTheme",
+        "title": "DaisyUI: Switch Theme in Document",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.insertSectionPattern",
+        "title": "DaisyUI: Insert Section Pattern",
         "category": "DaisyUI"
       }
     ]
