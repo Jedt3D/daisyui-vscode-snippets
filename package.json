@@ -2,7 +2,7 @@
   "name": "daisyui-vscode-snippets",
   "displayName": "DaisyUI HTML Snippets",
   "description": "Curated DaisyUI HTML snippets for VS Code with predictable prefixes, valid markup, and editable placeholders.",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "publisher": "sjedt",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Jedt3D/daisyui-vscode-snippets",
@@ -54,7 +54,8 @@
     "onCommand:daisyuiSnippets.insertPreset",
     "onCommand:daisyuiSnippets.previewPreset",
     "onCommand:daisyuiSnippets.switchTheme",
-    "onCommand:daisyuiSnippets.insertSectionPattern"
+    "onCommand:daisyuiSnippets.insertSectionPattern",
+    "onCommand:daisyuiSnippets.upgradeSelection"
   ],
   "contributes": {
     "commands": [
@@ -106,6 +107,11 @@
       {
         "command": "daisyuiSnippets.insertSectionPattern",
         "title": "DaisyUI: Insert Section Pattern",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.upgradeSelection",
+        "title": "DaisyUI: Upgrade Selected HTML",
         "category": "DaisyUI"
       }
     ]

@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.9.0] - 2026-03-27
+
+- added `DaisyUI: Upgrade Selected HTML` to inspect highlighted markup and apply DaisyUI-friendly upgrades in place
+- added safe upgrade actions for buttons, inputs, textareas, selects, tables, and generic content blocks
+- pushed the extension from insertion/refinement into the first real “edit existing HTML” workflow
+
 ## [0.8.0] - 2026-03-27
 
 - added `DaisyUI: Preview Preset` for rendered page-preset review before insertion

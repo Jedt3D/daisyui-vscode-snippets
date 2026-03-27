@@ -16,6 +16,7 @@ Current product goals:
 - favorites and recents memory
 - preset-based page composition
 - post-insert refinement actions
+- selected-html upgrade actions
 - generated snippet output
 - release-ready packaging and docs
 

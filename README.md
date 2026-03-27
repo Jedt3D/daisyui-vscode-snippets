@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.9.0`
+
+- Added `DaisyUI: Upgrade Selected HTML` for transforming existing markup instead of only inserting new snippets.
+- Added in-place upgrades for buttons, inputs, textareas, selects, tables, and generic content blocks.
+- Moved the extension one step closer to acting like a real HTML assistant rather than a snippet picker.
+
 ## What Changed in `0.8.0`
 
 - Added `DaisyUI: Preview Preset` so full-page scaffolds can be reviewed before insertion.
@@ -117,6 +123,7 @@ This release adds two faster discovery flows on top of normal snippet prefixes:
 - `DaisyUI: Preview Preset`
 - `DaisyUI: Switch Theme in Document`
 - `DaisyUI: Insert Section Pattern`
+- `DaisyUI: Upgrade Selected HTML`
 
 Use them when you remember the kind of component you want, but not the exact prefix.
 
@@ -160,6 +167,15 @@ The extension now helps refine pages after the first insert:
 - preview full-page presets before inserting them
 - switch the active document theme without hand-editing `data-theme`
 - drop in reusable section patterns to evolve a rough page faster
+
+## Upgrade Existing HTML
+
+You can now select existing markup and run `DaisyUI: Upgrade Selected HTML` to:
+
+- turn plain buttons into DaisyUI buttons
+- upgrade form fields into DaisyUI form controls
+- upgrade plain tables into DaisyUI tables
+- wrap raw blocks in a card surface without rebuilding the content manually
 
 ## Example Prefixes
 
