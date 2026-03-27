@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.3.0] - 2026-03-27
+
+- added `DaisyUI: Insert Snippet`, a command palette flow for searching and inserting snippets by name, prefix, or description
+- added `DaisyUI: Browse Snippets by Category` for quicker discovery across layout, forms, feedback, navigation, data, and action components
+- promoted discoverability from static snippets to a lightweight command-driven extension experience
+
 ## [0.2.4] - 2026-03-27
 
 - refreshed the Marketplace asset pack with a colored-pencil version of the mascot icon

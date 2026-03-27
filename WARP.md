@@ -10,6 +10,7 @@ Current product goals:
 
 - HTML-only scope
 - curated snippet UX
+- command-palette discovery
 - generated snippet output
 - release-ready packaging and docs
 
@@ -24,6 +25,8 @@ Current product goals:
   - validates prefix uniqueness, descriptions, placeholders, and basic HTML structure
 - `snippets/snippets.json`
   - generated output consumed by the VS Code extension manifest
+- `extension.js`
+  - command-palette entry point for snippet search and category browsing
 - `package.json`
   - extension metadata plus build/package scripts
 

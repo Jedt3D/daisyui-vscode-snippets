@@ -6,6 +6,7 @@
 - `scripts/generate-snippets.mjs`: builds the generated snippet file
 - `scripts/validate-snippets.mjs`: validates the catalog and generated output
 - `snippets/snippets.json`: generated VS Code snippet payload
+- `extension.js`: command-palette entry point for searchable insertion and category browsing
 
 ## Local Workflow
 
@@ -40,3 +41,5 @@ npm run package:vsix
 3. Create an HTML file.
 4. Type prefixes such as `d-alert`, `d-card`, or `d-textarea`.
 5. Confirm placeholders tab in a sensible order and the resulting HTML is valid.
+6. Open the Command Palette and run `DaisyUI: Insert Snippet`.
+7. Open the Command Palette and run `DaisyUI: Browse Snippets by Category`.

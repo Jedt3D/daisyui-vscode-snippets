@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.3.0`
+
+- Added `DaisyUI: Insert Snippet`, a command-palette flow for searching snippets by component, variant, prefix, or description.
+- Added `DaisyUI: Browse Snippets by Category` to jump into layout, forms, feedback, navigation, data, and actions faster.
+- Upgraded the extension from a static snippet pack to a more discoverable command-driven workflow.
+
 ## What Changed in `0.2.4`
 
 - Refreshed the Marketplace visuals with a colored-pencil mascot icon, banner, updated screenshots, and a short demo GIF.
@@ -66,6 +72,15 @@ Every snippet is designed for plain HTML workflows:
 - practical DaisyUI classes
 - editable placeholders
 - a useful final cursor position
+
+## Command Palette Workflow
+
+This release adds two faster discovery flows on top of normal snippet prefixes:
+
+- `DaisyUI: Insert Snippet`
+- `DaisyUI: Browse Snippets by Category`
+
+Use them when you remember the kind of component you want, but not the exact prefix.
 
 ## Example Prefixes
 
