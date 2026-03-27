@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.6.0`
+
+- Added recent snippet memory so the extension surfaces what you actually use most.
+- Added favorites with command-palette access and preview-panel toggling.
+- Ranked favorites and recents ahead of the broader catalog in completions and snippet pickers.
+
 ## What Changed in `0.5.0`
 
 - Added `DaisyUI: Preview Snippet`, a rendered preview panel for checking a snippet before inserting it.
@@ -92,6 +98,9 @@ This release adds two faster discovery flows on top of normal snippet prefixes:
 - `DaisyUI: Insert Snippet`
 - `DaisyUI: Browse Snippets by Category`
 - `DaisyUI: Preview Snippet`
+- `DaisyUI: Insert Recent Snippet`
+- `DaisyUI: Insert Favorite Snippet`
+- `DaisyUI: Toggle Favorite Snippet`
 
 Use them when you remember the kind of component you want, but not the exact prefix.
 
@@ -110,6 +119,14 @@ Run `DaisyUI: Preview Snippet` to:
 - render the chosen snippet in a dedicated preview panel
 - inspect the generated HTML beside the rendered output
 - insert the snippet into the active editor only when it looks right
+
+## Favorites and Recents
+
+The extension now remembers snippet usage across sessions:
+
+- recent snippets rise to the top after you insert or preview them
+- favorites can be toggled from the command palette or directly inside the preview panel
+- favorite and recent commands give you a much faster repeat workflow for daily use
 
 ## Example Prefixes
 

@@ -2,7 +2,7 @@
   "name": "daisyui-vscode-snippets",
   "displayName": "DaisyUI HTML Snippets",
   "description": "Curated DaisyUI HTML snippets for VS Code with predictable prefixes, valid markup, and editable placeholders.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "publisher": "sjedt",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Jedt3D/daisyui-vscode-snippets",
@@ -47,7 +47,10 @@
     "onLanguage:html",
     "onCommand:daisyuiSnippets.insertSnippet",
     "onCommand:daisyuiSnippets.insertSnippetByCategory",
-    "onCommand:daisyuiSnippets.previewSnippet"
+    "onCommand:daisyuiSnippets.previewSnippet",
+    "onCommand:daisyuiSnippets.insertRecentSnippet",
+    "onCommand:daisyuiSnippets.insertFavoriteSnippet",
+    "onCommand:daisyuiSnippets.toggleFavoriteSnippet"
   ],
   "contributes": {
     "commands": [
@@ -64,6 +67,21 @@
       {
         "command": "daisyuiSnippets.previewSnippet",
         "title": "DaisyUI: Preview Snippet",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.insertRecentSnippet",
+        "title": "DaisyUI: Insert Recent Snippet",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.insertFavoriteSnippet",
+        "title": "DaisyUI: Insert Favorite Snippet",
+        "category": "DaisyUI"
+      },
+      {
+        "command": "daisyuiSnippets.toggleFavoriteSnippet",
+        "title": "DaisyUI: Toggle Favorite Snippet",
         "category": "DaisyUI"
       }
     ]

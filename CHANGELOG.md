@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.6.0] - 2026-03-27
+
+- added recent snippet memory so frequently used items resurface faster across sessions
+- added favorite snippets with command-palette support and preview-panel toggling
+- upgraded completions and picker flows to rank favorites and recents ahead of the broader catalog
+
 ## [0.5.0] - 2026-03-27
 
 - added `DaisyUI: Preview Snippet`, a webview-based preview panel that renders the selected snippet before insertion
