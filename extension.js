@@ -18,6 +18,8 @@ const componentCategories = {
 
 const starterPrefixes = new Set([
   "!d",
+  "!d-dark",
+  "!d-corporate",
   "d-alert",
   "d-btn",
   "d-card",
@@ -75,6 +77,13 @@ function activate(context) {
       if (selected) {
         await toggleFavorite(selected.primaryPrefix);
       }
+    }),
+    vscode.commands.registerCommand("daisyuiSnippets.insertPreset", async () => {
+      const preset = await pickPreset();
+      if (!preset) {
+        return;
+      }
+      await insertPresetIntoActiveEditor(preset);
     }),
     vscode.commands.registerCommand("daisyuiSnippets._trackRecentInternal", async (prefix) => {
       await trackRecent(prefix);
@@ -150,6 +159,247 @@ const snippetEntries = Object.entries(snippets).map(([label, definition]) => {
 function getFavorites() {
   return extensionContext.globalState.get(FAVORITES_KEY, []);
 }
+
+function buildDocumentShell({ theme, title, bodyClass = "min-h-screen bg-base-200", bodyContent }) {
+  return String.raw`<!doctype html>
+<html lang="en" data-theme="${theme}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="${bodyClass}">
+${bodyContent}
+</body>
+</html>
+$0`;
+}
+
+const presets = [
+  {
+    key: "landing",
+    label: "Landing Page",
+    description: "Hero, feature cards, and CTA sections for a marketing page.",
+    detail: "Best for product launches, portfolio fronts, and polished one-page demos.",
+    body: buildDocumentShell({
+      theme: "${1:light}",
+      title: "${2:Launch faster with DaisyUI}",
+      bodyContent: String.raw`  <header class="navbar mx-auto max-w-6xl px-6 py-4">
+    <div class="flex-1">
+      <a href="\${3:#}" class="btn btn-ghost text-xl">\${4:Acme UI}</a>
+    </div>
+    <div class="flex gap-2">
+      <a href="\${5:#features}" class="btn btn-ghost">\${6:Features}</a>
+      <a href="\${7:#pricing}" class="btn btn-ghost">\${8:Pricing}</a>
+      <a href="\${9:#contact}" class="btn btn-primary">\${10:Get started}</a>
+    </div>
+  </header>
+  <main class="mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-16 pt-8">
+    <section class="hero rounded-box bg-base-100 shadow-xl">
+      <div class="hero-content flex-col gap-10 py-12 lg:flex-row-reverse">
+        <img src="\${11:https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80}" alt="\${12:Product preview}" class="max-w-sm rounded-2xl shadow-2xl" />
+        <div>
+          <span class="badge badge-primary badge-outline mb-4">\${13:Now shipping}</span>
+          <h1 class="text-5xl font-bold text-balance">\${14:Design polished HTML experiences in minutes}</h1>
+          <p class="py-6 text-lg text-base-content/75">\${15:Use DaisyUI components and Tailwind utilities to build a strong landing page without framework setup.}</p>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <button type="button" class="btn btn-primary btn-lg">\${16:Start free}</button>
+            <button type="button" class="btn btn-outline btn-lg">\${17:View components}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="features" class="grid gap-6 md:grid-cols-3">
+      <article class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title">\${18:Faster prototyping}</h2>
+          <p>\${19:Start from thoughtful component defaults instead of blank HTML.}</p>
+        </div>
+      </article>
+      <article class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title">\${20:Better snippet UX}</h2>
+          <p>\${21:Use ranked suggestions, previews, favorites, and recents to move quickly.}</p>
+        </div>
+      </article>
+      <article class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title">\${22:Easy theming}</h2>
+          <p>\${23:Swap DaisyUI themes without rewriting your page structure.}</p>
+        </div>
+      </article>
+    </section>
+    <section id="pricing" class="rounded-box bg-primary p-10 text-primary-content shadow-xl">
+      <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p class="text-sm uppercase tracking-[0.2em]">\${24:Ready to launch}</p>
+          <h2 class="text-3xl font-bold">\${25:Ship your next page with less setup}</h2>
+        </div>
+        <button type="button" class="btn btn-neutral btn-lg">\${26:Claim your starter}</button>
+      </div>
+    </section>`,
+    }),
+  },
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    description: "Sidebar, stats, table, and activity panel for internal tools.",
+    detail: "Best for admin UIs, analytics panels, and product operations screens.",
+    body: buildDocumentShell({
+      theme: "${1:corporate}",
+      title: "${2:Operations Dashboard}",
+      bodyClass: "min-h-screen bg-base-200",
+      bodyContent: String.raw`  <div class="drawer lg:drawer-open">
+    <input id="dashboard-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col">
+      <div class="navbar bg-base-100 shadow-sm lg:hidden">
+        <div class="flex-none">
+          <label for="dashboard-drawer" class="btn btn-square btn-ghost">
+            <span class="text-xl">\${3:=}</span>
+          </label>
+        </div>
+        <div class="flex-1 px-2 text-lg font-semibold">\${4:Dashboard}</div>
+      </div>
+      <main class="flex-1 p-6">
+        <div class="mx-auto grid max-w-7xl gap-6">
+          <section class="grid gap-4 md:grid-cols-3">
+            <div class="stat rounded-box bg-base-100 shadow-sm">
+              <div class="stat-title">\${5:Monthly revenue}</div>
+              <div class="stat-value text-primary">\${6:$48.2K}</div>
+              <div class="stat-desc">\${7:+14% from last month}</div>
+            </div>
+            <div class="stat rounded-box bg-base-100 shadow-sm">
+              <div class="stat-title">\${8:Active users}</div>
+              <div class="stat-value">\${9:8,420}</div>
+              <div class="stat-desc">\${10:+320 this week}</div>
+            </div>
+            <div class="stat rounded-box bg-base-100 shadow-sm">
+              <div class="stat-title">\${11:Open issues}</div>
+              <div class="stat-value text-warning">\${12:17}</div>
+              <div class="stat-desc">\${13:Needs follow-up today}</div>
+            </div>
+          </section>
+          <section class="grid gap-6 lg:grid-cols-[2fr,1fr]">
+            <div class="card bg-base-100 shadow-sm">
+              <div class="card-body">
+                <div class="flex items-center justify-between">
+                  <h2 class="card-title">\${14:Team queue}</h2>
+                  <button type="button" class="btn btn-sm btn-primary">\${15:Create task}</button>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>\${16:Task}</th>
+                        <th>\${17:Owner}</th>
+                        <th>\${18:Status}</th>
+                        <th>\${19:Due}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>\${20:Refresh onboarding flow}</td>
+                        <td>\${21:Mina}</td>
+                        <td><span class="badge badge-info">\${22:In review}</span></td>
+                        <td>\${23:Today}</td>
+                      </tr>
+                      <tr>
+                        <td>\${24:Publish snippet update}</td>
+                        <td>\${25:Jedt}</td>
+                        <td><span class="badge badge-warning">\${26:QA}</span></td>
+                        <td>\${27:Tomorrow}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="card bg-base-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">\${28:Activity}</h2>
+                <ul class="timeline timeline-vertical">
+                  <li>
+                    <div class="timeline-start">\${29:09:10}</div>
+                    <div class="timeline-middle">•</div>
+                    <div class="timeline-end timeline-box">\${30:Deploy finished successfully}</div>
+                  </li>
+                  <li>
+                    <div class="timeline-start">\${31:10:45}</div>
+                    <div class="timeline-middle">•</div>
+                    <div class="timeline-end timeline-box">\${32:QA approved release candidate}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <div class="drawer-side">
+      <label for="dashboard-drawer" class="drawer-overlay"></label>
+      <aside class="min-h-full w-72 bg-neutral text-neutral-content">
+        <div class="p-6 text-2xl font-bold">\${33:Acme Ops}</div>
+        <ul class="menu gap-2 px-4">
+          <li><a class="active">\${34:Overview}</a></li>
+          <li><a>\${35:Team}</a></li>
+          <li><a>\${36:Releases}</a></li>
+          <li><a>\${37:Settings}</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>`,
+    }),
+  },
+  {
+    key: "auth",
+    label: "Auth Screen",
+    description: "Centered sign-in page with trust copy and secondary links.",
+    detail: "Best for login, onboarding, and account access screens.",
+    body: buildDocumentShell({
+      theme: "${1:light}",
+      title: "${2:Sign in}",
+      bodyContent: String.raw`  <main class="grid min-h-screen place-items-center px-6 py-16">
+    <div class="grid w-full max-w-5xl gap-8 lg:grid-cols-[1.1fr,0.9fr]">
+      <section class="rounded-box bg-primary p-10 text-primary-content shadow-2xl">
+        <span class="badge badge-neutral mb-4">\${3:Welcome back}</span>
+        <h1 class="text-4xl font-bold text-balance">\${4:Access your product workspace securely}</h1>
+        <p class="mt-4 text-primary-content/80">\${5:Sign in to manage releases, curate snippets, and keep your design system moving.}</p>
+        <div class="mt-8 space-y-4">
+          <div class="rounded-box bg-primary-content/10 p-4">\${6:Preview snippets before insert, then save your best patterns as favorites.}</div>
+          <div class="rounded-box bg-primary-content/10 p-4">\${7:Jump back into your most recent UI flows without hunting for prefixes.}</div>
+        </div>
+      </section>
+      <section class="card bg-base-100 shadow-xl">
+        <div class="card-body gap-5">
+          <h2 class="card-title text-3xl">\${8:Sign in}</h2>
+          <label class="form-control">
+            <span class="label-text">\${9:Email}</span>
+            <input type="email" class="input input-bordered" placeholder="\${10:you@example.com}" />
+          </label>
+          <label class="form-control">
+            <span class="label-text">\${11:Password}</span>
+            <input type="password" class="input input-bordered" placeholder="\${12:••••••••}" />
+          </label>
+          <label class="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" class="checkbox checkbox-primary" checked="checked" />
+            <span class="label-text">\${13:Keep me signed in}</span>
+          </label>
+          <button type="button" class="btn btn-primary btn-block">\${14:Continue}</button>
+          <div class="divider">\${15:or}</div>
+          <button type="button" class="btn btn-outline btn-block">\${16:Continue with GitHub}</button>
+          <p class="text-center text-sm text-base-content/70">
+            \${17:Need an account?}
+            <a href="\${18:#}" class="link link-primary">\${19:Request access}</a>
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>`,
+    }),
+  },
+];
 
 function getRecents() {
   return extensionContext.globalState.get(RECENTS_KEY, []);
@@ -346,6 +596,25 @@ function getSnippetPickerPlaceholder(category, scope) {
   return category ? `Choose a ${category.toLowerCase()} snippet` : "Search by component, variant, prefix, or description";
 }
 
+async function pickPreset() {
+  const selected = await vscode.window.showQuickPick(
+    presets.map((preset) => ({
+      label: preset.label,
+      description: preset.description,
+      detail: preset.detail,
+      preset,
+    })),
+    {
+      title: "Insert DaisyUI Preset",
+      matchOnDescription: true,
+      matchOnDetail: true,
+      placeHolder: "Choose a page preset",
+    },
+  );
+
+  return selected ? selected.preset : undefined;
+}
+
 async function insertSnippetIntoActiveEditor(entry) {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -355,6 +624,16 @@ async function insertSnippetIntoActiveEditor(entry) {
 
   await editor.insertSnippet(new vscode.SnippetString(entry.body));
   await trackRecent(entry.primaryPrefix);
+}
+
+async function insertPresetIntoActiveEditor(preset) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage("Open an HTML file before inserting a DaisyUI preset.");
+    return;
+  }
+
+  await editor.insertSnippet(new vscode.SnippetString(preset.body));
 }
 
 function showSnippetPreview(entry) {

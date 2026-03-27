@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.7.0] - 2026-03-27
+
+- added theme-aware starter variants including `!d-dark` and `!d-corporate`
+- added `DaisyUI: Insert Preset` with curated landing page, dashboard, and auth screen scaffolds
+- expanded the extension from component insertion into multi-section page composition from a single command
+
 ## [0.6.0] - 2026-03-27
 
 - added recent snippet memory so frequently used items resurface faster across sessions

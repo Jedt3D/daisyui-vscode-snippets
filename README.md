@@ -12,6 +12,12 @@ Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, 
 
 ![Screenshot 2](./images/screenshot-2.jpg)
 
+## What Changed in `0.7.0`
+
+- Added themed document starters like `!d-dark` and `!d-corporate`.
+- Added `DaisyUI: Insert Preset` for landing, dashboard, and auth page scaffolds.
+- Pushed the extension beyond individual components into one-command page composition.
+
 ## What Changed in `0.6.0`
 
 - Added recent snippet memory so the extension surfaces what you actually use most.
@@ -101,6 +107,7 @@ This release adds two faster discovery flows on top of normal snippet prefixes:
 - `DaisyUI: Insert Recent Snippet`
 - `DaisyUI: Insert Favorite Snippet`
 - `DaisyUI: Toggle Favorite Snippet`
+- `DaisyUI: Insert Preset`
 
 Use them when you remember the kind of component you want, but not the exact prefix.
 
@@ -127,6 +134,15 @@ The extension now remembers snippet usage across sessions:
 - recent snippets rise to the top after you insert or preview them
 - favorites can be toggled from the command palette or directly inside the preview panel
 - favorite and recent commands give you a much faster repeat workflow for daily use
+
+## Theme Starters and Presets
+
+The extension now includes higher-level building blocks:
+
+- `!d` for the default starter
+- `!d-dark` for a darker product/demo surface
+- `!d-corporate` for a more structured product or internal-tool shell
+- `DaisyUI: Insert Preset` for landing page, dashboard, and auth scaffolds
 
 ## Example Prefixes
 

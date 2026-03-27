@@ -14,6 +14,7 @@ Current product goals:
 - richer in-editor completions
 - preview before insert
 - favorites and recents memory
+- preset-based page composition
 - generated snippet output
 - release-ready packaging and docs
 
