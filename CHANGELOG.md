@@ -2,6 +2,12 @@
 
 All notable changes to the `daisyui-vscode-snippets` extension are documented in this file.
 
+## [0.2.4] - 2026-03-27
+
+- refreshed the Marketplace asset pack with a colored-pencil version of the mascot icon
+- added a branded banner, updated screenshots, and a short demo GIF
+- added a reproducible asset generator for future Marketplace visual updates
+
 ## [0.2.3] - 2026-03-27
 
 - changed the Marketplace display name to `DaisyUI HTML Snippets` to avoid a naming conflict during publish

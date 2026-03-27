@@ -2,6 +2,25 @@
 
 Curated DaisyUI HTML snippets for Visual Studio Code with predictable prefixes, valid markup, and editable placeholders.
 
+![Marketplace banner](./images/banner.png)
+
+## Visual Preview
+
+![Demo GIF](./images/demo.gif)
+
+![Screenshot 1](./images/screenshot.jpg)
+
+![Screenshot 2](./images/screenshot-2.jpg)
+
+## What Changed in `0.2.4`
+
+- Refreshed the Marketplace visuals with a colored-pencil mascot icon, banner, updated screenshots, and a short demo GIF.
+- Added a reproducible asset generation script so the listing visuals can evolve without one-off editing.
+
+## What Changed in `0.2.3`
+
+- Changed the Marketplace display name to `DaisyUI HTML Snippets` to avoid a naming conflict during publish.
+
 ## What Changed in `0.2.2`
 
 - Added a tag-driven GitHub release workflow that packages and attaches the `.vsix` artifact automatically.
@@ -94,6 +113,15 @@ Source of truth:
 
 - [`src/snippet-catalog.mjs`](./src/snippet-catalog.mjs)
 
+Marketplace assets:
+
+- [`scripts/generate-marketplace-assets.py`](./scripts/generate-marketplace-assets.py)
+- [`images/banner.png`](./images/banner.png)
+- [`images/icon.png`](./images/icon.png)
+- [`images/screenshot.jpg`](./images/screenshot.jpg)
+- [`images/screenshot-2.jpg`](./images/screenshot-2.jpg)
+- [`images/demo.gif`](./images/demo.gif)
+
 Generated output:
 
 - [`snippets/snippets.json`](./snippets/snippets.json)
@@ -103,6 +131,7 @@ Core commands:
 ```bash
 npm install
 npm run generate
+npm run assets:generate
 npm run validate
 npm run package:vsix
 npm run release:check
